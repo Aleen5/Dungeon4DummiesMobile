@@ -16,7 +16,7 @@ data class UsersModel(
                 "1234",
                 "DJ",
                 "Saineres",
-                "dj@gmail.dev"
+                "sainero@gmail.dev"
             ),
             UsersModel(
                 "2",
@@ -28,11 +28,11 @@ data class UsersModel(
             ),
             UsersModel(
                 "3",
-                "Alex",
+                "AlexD",
                 "1234",
-                "DJ",
-                "XD",
-                "dj@gmail.dev"
+                "Alex",
+                "Sepiro",
+                "arekusu@gmail.dev"
             )
         )
     }

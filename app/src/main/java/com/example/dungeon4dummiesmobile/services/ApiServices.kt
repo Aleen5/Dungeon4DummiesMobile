@@ -11,8 +11,11 @@ interface ApiServices {
     @GET("users")
     suspend fun getUsers() : Response<List<UsersModel>>
 
-    @GET("users/{usename}")
+    @GET("users/{username}")
     suspend fun getUser(@Path("username")username: String) : Response<UsersModel>
+
+    @GET("users/{username}/{password}")
+    suspend fun getLogin(@Path("username")username: String, password: String) : Response<UsersModel>
 
     @PUT("users/{username}")
     suspend fun updateUser(
@@ -34,7 +37,7 @@ interface ApiServices {
                 apiServices = Retrofit.Builder()
                     //tenéis que conectar el móvil a la misma red que el ordenador en el que abráis el servidor y poner su IP
                     //+ puerto en la "baseUrl"
-                    .baseUrl("http://172.20.10.5:3000/")
+                    .baseUrl("http://127.0.0.1:8080/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(ApiServices::class.java)
             }

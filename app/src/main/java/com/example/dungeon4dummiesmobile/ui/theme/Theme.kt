@@ -5,17 +5,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-import com.example.dungeon4dummiesmobile.R
 
 private val DarkColorPalette = darkColors(
-    primary = DDARKBROWN,
-    primaryVariant = Purple700,
+    primary = MAINCOLOR,
+    primaryVariant = SECONDARYCOLOR,
     secondary = Teal200
 )
 
 private val LightColorPalette = lightColors(
-    primary = DDARKBROWN,
-    primaryVariant = Purple700,
+    primary = MAINCOLOR,
+    primaryVariant = SECONDARYCOLOR,
     secondary = Teal200
 
     /* Other default colors to override

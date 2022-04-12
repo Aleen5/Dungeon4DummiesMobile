@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="DDARKBROWN">#46352d</color>
-    <color name="DDLIGHTBROWN">#d2bf95</color>
-    <color name="purple_700">#FF3700B3</color>
+    <color name="MAINCOLOR">#59544B</color>
+    <color name="SECONDARYCOLOR">#4E462D</color>
+    <color name="THIRDCOLOR">#7D8CA3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>

@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.example.dungeon4dummiesmobile.navigation.AppNavigation
 import com.example.dungeon4dummiesmobile.ui.theme.Dungeon4DummiesMobileTheme
-import com.example.dungeon4dummiesmobile.screens.login.LoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

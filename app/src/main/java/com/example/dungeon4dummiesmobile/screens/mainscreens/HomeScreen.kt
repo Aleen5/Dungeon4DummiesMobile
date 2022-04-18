@@ -1,4 +1,4 @@
-package com.example.dungeon4dummiesmobile.screens.login
+package com.example.dungeon4dummiesmobile.screens.mainscreens
 
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable

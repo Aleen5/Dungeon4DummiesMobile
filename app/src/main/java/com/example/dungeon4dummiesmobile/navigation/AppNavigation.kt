@@ -6,8 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.dungeon4dummiesmobile.screens.login.HomeScreen
-import com.example.dungeon4dummiesmobile.screens.login.LoginScreen
+import com.example.dungeon4dummiesmobile.screens.mainscreens.HomeScreen
+import com.example.dungeon4dummiesmobile.screens.mainscreens.LoginScreen
+import com.example.dungeon4dummiesmobile.screens.mainscreens.RegisterScreen
 
 @Composable
 fun AppNavigation() {
@@ -21,5 +22,9 @@ fun AppNavigation() {
         })) {
             HomeScreen(navController, it.arguments?.getString("username"))
         }
+        composable(route = AppScreens.RegisterScreen.route) {
+            RegisterScreen(navController)
+        }
+
     }
 }

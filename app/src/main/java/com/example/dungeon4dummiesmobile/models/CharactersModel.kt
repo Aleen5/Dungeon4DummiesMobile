@@ -26,7 +26,8 @@ data class CharactersModel(
     val inventory: MutableList<String>,
     val backstory: String,
     val ideals: String,
-    val proficiencies: String
+    val proficiencies: String,
+    val avatar: String
 )
 
 data class StatsModel(

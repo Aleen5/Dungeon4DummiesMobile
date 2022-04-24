@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.dungeon4dummiesmobile.models.UsersModel
 import com.example.dungeon4dummiesmobile.services.ApiServices
 import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class UsersViewModel: ViewModel() {
     var usersComprobator by mutableStateOf(false)
@@ -31,27 +32,26 @@ class UsersViewModel: ViewModel() {
         }
     }
 
-    fun get1User(username: String, password: String) {
+    fun get1User(username: String, onComplete: (usersModel: UsersModel?) -> Unit) {
         viewModelScope.launch {
             val apiServices = ApiServices.getInstance()
             try {
                 val user = apiServices.getUser(username)
                 if (user.isSuccessful) {
-                    usersModel = user.body()!!
-                    if (usersModel.username == username && usersModel.password == password)
-                        usersComprobator = true
-                    else
-                        loginFailures--
+                    onComplete(user.body()!!)
+                } else {
+                    onComplete(null)
                 }
             }
             catch (e: Exception) {
                 errorMessage = e.message.toString()
+                onComplete(null)
                 loginFailures--
             }
         }
     }
 
-    fun login(username: String, password: String, onComplete: (usersModel: UsersModel?, cause: String)-> Unit) {
+    fun login(username: String, password: String, onComplete: (usersModel: UsersModel?, cause: String) -> Unit) {
         viewModelScope.launch {
             val apiServices = ApiServices.getInstance()
             try {
@@ -67,6 +67,23 @@ class UsersViewModel: ViewModel() {
                 errorMessage = e.message.toString()
                 onComplete(null, "catch")
                 loginFailures--
+            }
+        }
+    }
+
+    fun postUser(user: UsersModel) {
+        viewModelScope.launch {
+            val apiServices = ApiServices.getInstance()
+            try {
+                val userP = apiServices.postUser(user)
+                if (userP.isSuccessful) {
+                    usersModel = userP.body()!!
+                } else {
+                    Log.d("Ticket", "Ticket error")
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+                Log.d("TICKET", errorMessage)
             }
         }
     }

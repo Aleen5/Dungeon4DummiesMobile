@@ -1,5 +1,6 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,18 +13,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.models.UsersModel
 import com.example.dungeon4dummiesmobile.navigation.AppScreens
-import com.example.dungeon4dummiesmobile.screens.shared.InputTextField
-import com.example.dungeon4dummiesmobile.screens.shared.LogoAsset
-import com.example.dungeon4dummiesmobile.screens.shared.PasswordTextField
-import com.example.dungeon4dummiesmobile.screens.shared.TopBar
+import com.example.dungeon4dummiesmobile.screens.shared.*
 import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
 import com.example.dungeon4dummiesmobile.ui.theme.SECONDARYCOLOR
+import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 
 @Composable
 fun RegisterScreen(navController: NavController) {
+    val usersViewModel = viewModel(UsersViewModel::class.java)
     var username by remember {
         mutableStateOf("")
     }
@@ -79,7 +80,7 @@ fun RegisterScreen(navController: NavController) {
                     item { PasswordTextField("Password", password, onValueChange = {password = it})}
                     item { PasswordTextField("Repeat password", repeatPassword, onValueChange = {repeatPassword = it})}
                     item { Row {
-                        RegisterButton(navController = navController, name, surname, email, username, password, repeatPassword) }
+                        RegisterButton(navController, name, surname, email, username, password, repeatPassword, usersViewModel)}
                     }
                 }
             }
@@ -90,29 +91,71 @@ fun RegisterScreen(navController: NavController) {
                    Text(text = user.username)
                }
            }
-
              */
         }
 
     }
+
 }
 
 @Composable
 fun RegisterButton(navController: NavController, name: String, surname: String, email: String, username: String, password: String,
-    repeatPassword: String) {
+    repeatPassword: String, usersViewModel: UsersViewModel) {
     val context = LocalContext.current
+    val showDialogLoading = remember {
+        mutableStateOf(false)
+    }
+
     Button(
         modifier = Modifier
             .width(100.dp)
             .padding(vertical = 15.dp),
         onClick = {
-            Toast.makeText(context, "Registered successfully", Toast.LENGTH_SHORT)
+            // Field checks
+            if (name == "" || name == " " || name == null) {
+                Toast.makeText(context, "Name cannot be empty", Toast.LENGTH_SHORT).show()
+                return@Button
+            } else if (surname == "" || surname == " " || surname == null) {
+                Toast.makeText(context, "Surname cannot be empty", Toast.LENGTH_SHORT).show()
+                return@Button
+            } else if (email == "" || email == " " || email == null) {
+                Toast.makeText(context, "Email cannot be empty", Toast.LENGTH_SHORT).show()
+                return@Button
+            } else if (username == "" || username == " " || username == null) {
+            Toast.makeText(context, "Username cannot be empty", Toast.LENGTH_SHORT).show()
+            return@Button
+            } else if (password == "" || password == " " || password == null) {
+                Toast.makeText(context, "Password cannot be empty", Toast.LENGTH_SHORT).show()
+                return@Button
+            } else if (repeatPassword == "" || repeatPassword == " " || repeatPassword == null) {
+                Toast.makeText(context, "Repeat password cannot be empty", Toast.LENGTH_SHORT).show()
+                return@Button
+            } else if (password != repeatPassword) {
+                Toast.makeText(context, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@Button
+            }
 
-            var currentUser = UsersModel("u1", username, password, name, surname, email)
-            navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser.username}")
+            showDialogLoading.value = true
+            val rnds = (100000000..999999999).random().toString()
+            val user = UsersModel(rnds, username, password, name, surname, email)
+
+            usersViewModel.get1User(username) { existingUser ->
+                if (existingUser != null) {
+                    Toast.makeText(context, "The username is taken", Toast.LENGTH_SHORT).show()
+
+                } else {
+                    usersViewModel.postUser(user)
+                    Toast.makeText(context, "Registered successfully", Toast.LENGTH_SHORT).show()
+                    navController.navigate(route = AppScreens.HomeScreen.route + "/${user.username}")
+                }
+            }
+            showDialogLoading.value = false
+            //navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser.username}")
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR)
     ) {
         Text(text = "Register")
     }
+
+    DialogLoading(showDialogLoading)
 }

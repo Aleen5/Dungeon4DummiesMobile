@@ -9,7 +9,6 @@ import com.example.dungeon4dummiesmobile.ui.theme.Dungeon4DummiesMobileTheme
 import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

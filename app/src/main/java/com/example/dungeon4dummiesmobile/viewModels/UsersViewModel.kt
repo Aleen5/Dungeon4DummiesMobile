@@ -12,11 +12,9 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class UsersViewModel: ViewModel() {
-    var usersComprobator by mutableStateOf(false)
     var usersModelListResponse: List<UsersModel> by mutableStateOf(listOf())
-    var usersModel: UsersModel by mutableStateOf(UsersModel("idprueba", "uwusername", "uwupassword", "uwuname", "uwusurname", "uwuemail"))
+    var usersModel: UsersModel by mutableStateOf(UsersModel("idprueba", "uwusername", "uwupassword", "uwuname", "uwusurname", "uwuemail", listOf("uwu", "uwu")))
     private var errorMessage: String by mutableStateOf("")
-    var logged by mutableStateOf(false)
     var loginFailures by mutableStateOf(3)
 
     fun getUsersList() {

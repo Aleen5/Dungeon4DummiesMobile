@@ -137,7 +137,7 @@ fun RegisterButton(navController: NavController, name: String, surname: String, 
 
             showDialogLoading.value = true
             val rnds = (100000000..999999999).random().toString()
-            val user = UsersModel(rnds, username, password, name, surname, email)
+            val user = UsersModel(rnds, username, password, name, surname, email, listOf(""))
 
             usersViewModel.get1User(username) { existingUser ->
                 if (existingUser != null) {

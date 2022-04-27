@@ -108,7 +108,7 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
         }
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = "XD",
+            text = "Dungeons4Dummies v. 0.5",
             color = Color.White,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
@@ -118,7 +118,6 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
         )
     }
 }
-
 
 @Composable
 fun DrawerItem(item: DrawerNavigation, selected: Boolean, onItemClick: (DrawerNavigation) -> Unit) {

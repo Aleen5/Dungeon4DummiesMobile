@@ -42,7 +42,7 @@ fun LoginScreen(navController: NavController) {
 
         topBar = { TopBar(barText = "Login")},
 
-    ) { contentPadding ->
+    ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -108,7 +108,9 @@ fun LoginButton(user: String, password: String, navController: NavController, us
 
             usersViewModel.login(user, password) { currentUser, cause ->
                 if (currentUser != null && cause == "good") {
-                    navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser!!.username}")
+                    usersViewModel.get1User(user) {
+                        navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser!!.username}")
+                    }
                 }
                 else if(currentUser == null && cause == "bad"){
                     Toast.makeText(context, "Incorrect login", Toast.LENGTH_SHORT).show()
@@ -127,7 +129,6 @@ fun LoginButton(user: String, password: String, navController: NavController, us
     ) {
         Text(text = "Log in")
     }
-
     DialogLoading(showDialogLoading)
 }
 

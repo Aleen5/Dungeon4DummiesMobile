@@ -18,7 +18,9 @@ fun AppNavigation() {
         composable(route = AppScreens.HomeScreen.route + "/{username}", listOf(navArgument(name = "username") {
             type = NavType.StringType
         })) {
-            HomeScreen(navController, it.arguments?.getString("username"))
+            var username = it.arguments?.getString("username")
+            requireNotNull(username)
+            HomeScreen(navController, username)
         }
         composable(route = AppScreens.RegisterScreen.route) {
             RegisterScreen(navController)
@@ -27,19 +29,25 @@ fun AppNavigation() {
          composable(route = AppScreens.CharactersScreen.route + "/{username}", listOf(navArgument(name = "username") {
              type = NavType.StringType
          })) {
-             CharactersScreen(navController, it.arguments?.getString("username"))
+             var username = it.arguments?.getString("username")
+             requireNotNull(username)
+             CharactersScreen(navController, username)
          }
 
         composable(route = AppScreens.ProfileScreen.route + "/{username}", listOf(navArgument(name = "username") {
             type = NavType.StringType
         })) {
-            ProfileScreen(navController, it.arguments?.getString("username"))
+            var username = it.arguments?.getString("username")
+            requireNotNull(username)
+            ProfileScreen(navController, username)
         }
 
         composable(route = AppScreens.SettingsScreen.route + "/{username}", listOf(navArgument(name = "username") {
             type = NavType.StringType
         })) {
-            SettingsScreen(navController, it.arguments?.getString("username"))
+            var username = it.arguments?.getString("username")
+            requireNotNull(username)
+            SettingsScreen(navController, username)
         }
     }
 }

@@ -21,17 +21,24 @@ import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 import kotlinx.coroutines.currentCoroutineContext
 
 @Composable
-fun HomeScreen(navController: NavController, username: String?) {
+fun HomeScreen(navController: NavController, username: String) {
     val usersViewModel = viewModel(UsersViewModel::class.java)
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
     var user by remember {
-        mutableStateOf(UsersModel("", "c", "", "", "", "", mutableListOf("")))
+        mutableStateOf(usersViewModel.user)
     }
 
-    var user2 = usersViewModel.get1User(username!!) { currentUser ->
-        if (currentUser != null) {
+    var getData by remember {
+        mutableStateOf(true)
+    }
 
+    LaunchedEffect(key1 = getData) {
+        if (getData) {
+            getData = false
+            usersViewModel.get1User(username) {
+                user = usersViewModel.user
+            }
         }
     }
 
@@ -43,7 +50,7 @@ fun HomeScreen(navController: NavController, username: String?) {
             Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username!!)
         }
     ){
-        username?.let { Text(text = it, modifier = Modifier.padding(top = 40.dp)) }
+        Text(text = user.username)
         LogButton(usersViewModel, username)
 
     }
@@ -91,6 +98,5 @@ fun LogButton(usersViewModel: UsersViewModel, user: String?) {
 }
 
 // PREGUNTAR A SAINERO
-// Como añadir el usuario obtenido el el botón a una variable?
-// Como actualizar un composable con los datos actualizados?
+// Como actualizar un composable con nuevos datos luego de haberlo creado?
 // Campos que faltan en el plan económico

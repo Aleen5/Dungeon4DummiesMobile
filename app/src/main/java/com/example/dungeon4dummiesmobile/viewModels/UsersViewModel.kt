@@ -16,6 +16,7 @@ class UsersViewModel: ViewModel() {
     var usersModel: UsersModel by mutableStateOf(UsersModel("idprueba", "uwusername", "uwupassword", "uwuname", "uwusurname", "uwuemail", mutableListOf("uwu", "uwu")))
     private var errorMessage: String by mutableStateOf("")
     var loginFailures by mutableStateOf(3)
+    var user = UsersModel("", "", "", "", "", "", mutableListOf("", ""))
 
     fun getUsersList() {
         viewModelScope.launch {
@@ -34,9 +35,10 @@ class UsersViewModel: ViewModel() {
         viewModelScope.launch {
             val apiServices = ApiServices.getInstance()
             try {
-                val user = apiServices.getUser(username)
-                if (user.isSuccessful) {
-                    onComplete(user.body()!!)
+                val result = apiServices.getUser(username)
+                if (result.isSuccessful) {
+                    user = result.body()!!
+                    onComplete(result.body()!!)
                 } else {
                     onComplete(null)
                 }

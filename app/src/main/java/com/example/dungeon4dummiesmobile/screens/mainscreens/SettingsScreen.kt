@@ -12,7 +12,7 @@ import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
 
 @Composable
-fun SettingsScreen(navController: NavController, username: String?) {
+fun SettingsScreen(navController: NavController, username: String) {
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
     Scaffold(

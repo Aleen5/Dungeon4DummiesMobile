@@ -94,7 +94,6 @@ fun LoginButton(user: String, password: String, navController: NavController, us
             .padding(vertical = 15.dp),
         onClick = {
 
-
             if (user.equals("") || user.equals(" ")) {
                 Toast.makeText(context, "Empty login", Toast.LENGTH_SHORT).show()
                 return@Button

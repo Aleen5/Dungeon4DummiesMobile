@@ -24,20 +24,22 @@ fun AppNavigation() {
             RegisterScreen(navController)
         }
 
-         composable(route = AppScreens.CharactersScreen.route) {
-             CharactersScreen(navController)
+         composable(route = AppScreens.CharactersScreen.route + "/{username}", listOf(navArgument(name = "username") {
+             type = NavType.StringType
+         })) {
+             CharactersScreen(navController, it.arguments?.getString("username"))
          }
 
-        composable(route = AppScreens.CharactersScreen.route) {
-            CharactersScreen(navController)
+        composable(route = AppScreens.ProfileScreen.route + "/{username}", listOf(navArgument(name = "username") {
+            type = NavType.StringType
+        })) {
+            ProfileScreen(navController, it.arguments?.getString("username"))
         }
 
-        composable(route = AppScreens.ProfileScreen.route) {
-            ProfileScreen(navController)
-        }
-
-        composable(route = AppScreens.SettingsScreen.route) {
-            SettingsScreen(navController)
+        composable(route = AppScreens.SettingsScreen.route + "/{username}", listOf(navArgument(name = "username") {
+            type = NavType.StringType
+        })) {
+            SettingsScreen(navController, it.arguments?.getString("username"))
         }
     }
 }

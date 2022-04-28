@@ -65,7 +65,7 @@ fun TopBarExtended(barText: String, scope: CoroutineScope, scaffoldState: Scaffo
 }
 
 @Composable
-fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController) {
+fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController, username: String) {
     val items = listOf(
         DrawerNavigation.Profile,
         DrawerNavigation.Settings
@@ -91,7 +91,7 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
             DrawerItem(item = item, selected = currentRoute == item.route, onItemClick = {
-                navController.navigate(item.route) {
+                navController.navigate(item.route + "/${username}") {
                     navController.graph.startDestinationRoute?.let { route ->
                         popUpTo(route) {
                             saveState = true

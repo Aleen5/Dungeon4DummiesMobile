@@ -1,5 +1,7 @@
 package com.example.dungeon4dummiesmobile.models
 
+import StatsModel
+
 data class CharactersModel(
     val _id: String,
     val id: String,
@@ -28,29 +30,4 @@ data class CharactersModel(
     val ideals: String,
     val proficiencies: String,
     val avatar: String
-)
-
-data class StatsModel(
-    val ArmorClass: Int,
-    val Initiative: Int,
-    val Strength: Int,
-    val Dexterty: Int,
-    val Constitutio: Int,
-    val Intelligence: Int,
-    val Wisdom: Int,
-    val Charisma: Int,
-    val Acrobatics: Int,
-    val Deception: Int,
-    val History: Int,
-    val Insight: Int,
-    val Intimidation: Int,
-    val Performance: Int,
-    val Medicine: Int,
-    val Nature: Int,
-    val Perception: Int,
-    val Persuasion: Int,
-    val Religion: Int,
-    val Stealth: Int,
-    val Survival: Int,
-    val AnimalHandling: Int
 )

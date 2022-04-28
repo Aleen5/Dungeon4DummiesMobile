@@ -8,6 +8,8 @@ import retrofit2.http.*
 
 interface ApiServices {
 
+    // USERS
+
     @GET("users")
     suspend fun getUsers() : List<UsersModel>
 
@@ -27,6 +29,25 @@ interface ApiServices {
     suspend fun postUser(
         @Body extra : UsersModel
     ) : Response<UsersModel>
+
+    // CHARACTERS
+
+    @GET("characters")
+    suspend fun getCharacters() : List<CharactersModel>
+
+    @GET("characters/{id}")
+    suspend fun getCharacter(@Path("id")id: String) : Response<CharactersModel>
+
+    @PUT("characters/{id}")
+    suspend fun updateCharacter(
+        @Path("id")id: String,
+        @Body character : CharactersModel
+    ) : Response<CharactersModel>
+
+    @POST("characters")
+    suspend fun postCharacter(
+        @Body extra : CharactersModel
+    ) : Response<CharactersModel>
 
 
     companion object {

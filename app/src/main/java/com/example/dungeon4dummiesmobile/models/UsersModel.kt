@@ -7,7 +7,7 @@ data class UsersModel(
     val name: String,
     val surname: String,
     val email: String,
-    val characters: List<String>
+    val characters: MutableList<String>
 ) {
     companion object {
         val usersArray: MutableList<UsersModel> = mutableListOf(
@@ -18,7 +18,7 @@ data class UsersModel(
                 "DJ",
                 "Saineres",
                 "sainero@gmail.dev",
-                listOf("1", "2")
+                mutableListOf("1", "2")
             ),
             UsersModel(
                 "2",
@@ -27,7 +27,7 @@ data class UsersModel(
                 "DJ",
                 "Czaplicki",
                 "dj@gmail.dev",
-                listOf("1", "2")
+                mutableListOf("1", "2")
             ),
             UsersModel(
                 "3",
@@ -36,7 +36,7 @@ data class UsersModel(
                 "Alex",
                 "Sepiro",
                 "arekusu@gmail.dev",
-                listOf("1", "2")
+                mutableListOf("1", "2")
             )
         )
     }

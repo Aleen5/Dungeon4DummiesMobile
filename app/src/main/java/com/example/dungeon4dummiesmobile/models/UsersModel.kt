@@ -1,13 +1,13 @@
 package com.example.dungeon4dummiesmobile.models
 
 data class UsersModel(
-    val _id: String,
-    val username: String,
-    val password: String,
-    val name: String,
-    val surname: String,
-    val email: String,
-    val characters: MutableList<String>
+    var _id: String,
+    var username: String,
+    var password: String,
+    var name: String,
+    var surname: String,
+    var email: String,
+    var characters: MutableList<String>
 ) {
     companion object {
         val usersArray: MutableList<UsersModel> = mutableListOf(

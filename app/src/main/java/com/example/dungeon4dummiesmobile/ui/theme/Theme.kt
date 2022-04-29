@@ -29,7 +29,8 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun Dungeon4DummiesMobileTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    //darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {

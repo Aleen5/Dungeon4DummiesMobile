@@ -44,30 +44,15 @@ fun HomeScreen(navController: NavController, username: String) {
 
     Scaffold(
         topBar = { TopBarExtended(barText = "Home", scope = scope, scaffoldState = scaffoldState) },
-        bottomBar = { BottomBar(navController, username!!) },
+        bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
         drawerContent = {
-            Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username!!)
+            Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username)
         }
     ){
         Text(text = user.username)
         LogButton(usersViewModel, username)
 
-    }
-    //username?.let { Text(text = it, modifier = Modifier.padding(top = 40.dp)) }
-}
-
-@Composable
-fun HelloContent(user: UsersModel, onUserChange: (String) -> Unit) {
-    Column(modifier = Modifier.padding(top = 100.dp)) {
-        Text(
-            text = "Hello, ${user.username}"
-        )
-        OutlinedTextField(
-            value = user.username,
-            onValueChange = onUserChange,
-            label = { Text("Username")}
-        )
     }
 }
 
@@ -96,7 +81,3 @@ fun LogButton(usersViewModel: UsersViewModel, user: String?) {
 
     }
 }
-
-// PREGUNTAR A SAINERO
-// Como actualizar un composable con nuevos datos luego de haberlo creado?
-// Campos que faltan en el plan económico

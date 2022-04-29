@@ -31,11 +31,11 @@ fun LoginScreen(navController: NavController) {
         mutableStateOf(false)
     }
     var user by remember {
-        mutableStateOf("")
+        mutableStateOf("SenatoSenatum15")
     }
 
     var password by remember {
-        mutableStateOf("")
+        mutableStateOf("1234")
     }
     
     Scaffold(
@@ -68,17 +68,7 @@ fun LoginScreen(navController: NavController) {
                      }
                  }
              }
-
-             /* Lazy Column DJ Example
-            LazyColumn() {
-                items(UsersModel.usersArray) { user ->
-                    Text(text = user.username)
-                }
-            }
-
-              */
         }
-
     }
 }
 
@@ -108,9 +98,7 @@ fun LoginButton(user: String, password: String, navController: NavController, us
 
             usersViewModel.login(user, password) { currentUser, cause ->
                 if (currentUser != null && cause == "good") {
-                    usersViewModel.get1User(user) {
-                        navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser!!.username}")
-                    }
+                    navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser!!.username}")
                 }
                 else if(currentUser == null && cause == "bad"){
                     Toast.makeText(context, "Incorrect login", Toast.LENGTH_SHORT).show()
@@ -121,9 +109,6 @@ fun LoginButton(user: String, password: String, navController: NavController, us
                 }
                 showDialogLoading.value = false
             }
-
-            //Log.d("LOGIN",  usersViewModel.)
-
         },
         colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR)
     ) {

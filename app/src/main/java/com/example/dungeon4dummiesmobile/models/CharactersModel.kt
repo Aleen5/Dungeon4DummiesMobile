@@ -29,5 +29,6 @@ data class CharactersModel(
     val backstory: String,
     val ideals: String,
     val proficiencies: String,
-    val avatar: String
+    val avatar: String,
+    val owner: String
 )

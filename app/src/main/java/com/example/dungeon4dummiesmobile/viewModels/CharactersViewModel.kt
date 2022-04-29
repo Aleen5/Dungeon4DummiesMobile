@@ -20,7 +20,7 @@ class CharactersViewModel: ViewModel() {
             10, 30, 35, 10, 20, 25, 20, 10, 10, 50, 30, 35),
         35, 20, 0, 20, 15, mutableListOf("10/30/40: XD", "11/30/40: XD2"), mutableListOf("XD: XD", "XDXD: XDXDXD"),
         mutableListOf("XD", "XDXD", "XD"), 3, mutableListOf("XD", "XD2"), "uwubackstory", "uwuideals",
-        "uwuproficiencies", "uwuavatar"))
+        "uwuproficiencies", "uwuavatar", "a"))
     private var errorMessage: String by mutableStateOf("")
 
     fun getCharactersList() {
@@ -50,6 +50,22 @@ class CharactersViewModel: ViewModel() {
             catch (e: Exception) {
                 errorMessage = e.message.toString()
                 onComplete(null)
+            }
+        }
+    }
+
+    fun getUsersCharacters(owner: String, onComplete: (charactersList: List<CharactersModel>) -> Unit) {
+        viewModelScope.launch {
+            val apiServices = ApiServices.getInstance()
+            try {
+                val cList = apiServices.getUsersCharacters(owner)
+                if (!cList.isNullOrEmpty()) {
+                    onComplete(cList)
+                    charactersModelListResponse = cList
+                }
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+                Log.d("Character", errorMessage)
             }
         }
     }

@@ -38,6 +38,9 @@ interface ApiServices {
     @GET("characters/{id}")
     suspend fun getCharacter(@Path("id")id: String) : Response<CharactersModel>
 
+    @GET("characters/user/{owner}")
+    suspend fun getUsersCharacters(@Path("owner")id: String) : List<CharactersModel>
+
     @PUT("characters/{id}")
     suspend fun updateCharacter(
         @Path("id")id: String,

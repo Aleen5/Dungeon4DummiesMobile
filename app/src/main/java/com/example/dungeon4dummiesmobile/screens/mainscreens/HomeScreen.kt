@@ -10,6 +10,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.models.UsersModel
@@ -17,12 +18,14 @@ import com.example.dungeon4dummiesmobile.navigation.AppScreens
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
+import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 import kotlinx.coroutines.currentCoroutineContext
 
 @Composable
 fun HomeScreen(navController: NavController, username: String) {
     val usersViewModel = viewModel(UsersViewModel::class.java)
+    val charactersViewModel = viewModel(CharactersViewModel::class.java)
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
     var user by remember {
@@ -39,6 +42,7 @@ fun HomeScreen(navController: NavController, username: String) {
             usersViewModel.get1User(username) {
                 user = usersViewModel.user
             }
+            charactersViewModel.getUsersCharacters(username) {}
         }
     }
 
@@ -51,33 +55,5 @@ fun HomeScreen(navController: NavController, username: String) {
         }
     ){
         Text(text = user.username)
-        LogButton(usersViewModel, username)
-
-    }
-}
-
-@Composable
-fun LogButton(usersViewModel: UsersViewModel, user: String?) {
-    val context = LocalContext.current
-    Button(
-        onClick = {
-            usersViewModel.get1User(user!!) { currentUser ->
-                if (currentUser != null) {
-                    Toast.makeText(context, currentUser.email, Toast.LENGTH_SHORT).show()
-                }
-                else if(currentUser == null){
-                    Toast.makeText(context, "Incorrect username", Toast.LENGTH_SHORT).show()
-                    Log.d("XD", "BAD")
-                }
-                else {
-                    Toast.makeText(context, "Unexpected login error", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            Toast.makeText(context, user, Toast.LENGTH_SHORT).show()
-        },
-        modifier = Modifier.padding(top = 80.dp)
-    ) {
-
     }
 }

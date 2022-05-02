@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.R
 import com.example.dungeon4dummiesmobile.models.CharactersModel
+import com.example.dungeon4dummiesmobile.navigation.AppScreens
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
@@ -43,7 +44,7 @@ fun CharactersScreen(navController: NavController, username: String) {
         if (getData) {
             getData = false
             charactersViewModel.getUsersCharacters(username) {
-                charactersList = charactersViewModel.charactersModelListResponse
+                charactersList = it
             }
         }
     }
@@ -64,7 +65,7 @@ fun CharactersScreen(navController: NavController, username: String) {
                 contentPadding = PaddingValues(16.dp)
             ) {
                 items(charactersList) { character ->
-                    CharacterCard(character)
+                    CharacterCard(navController, character)
                 }
             }
         } else {
@@ -74,12 +75,11 @@ fun CharactersScreen(navController: NavController, username: String) {
 }
 
 @Composable
-fun CharacterCard(character: CharactersModel) {
+fun CharacterCard(navController: NavController, character: CharactersModel) {
     val context = LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 15.dp).clickable {
-            Toast.makeText(context, "${character.name} ${character.surname}", Toast.LENGTH_SHORT).show()
-            // NAVEGAR AQUI A VENTANA DE CHARACTER
+            navController.navigate(route = AppScreens.CharacterScreen.route + "/${character.owner}/${character.id}")
         }
     ) {
         Row(
@@ -97,5 +97,4 @@ fun CharacterCard(character: CharactersModel) {
             }
         }
     }
-
 }

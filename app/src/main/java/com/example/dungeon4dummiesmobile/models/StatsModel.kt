@@ -8,6 +8,7 @@ data class StatsModel(
     val Wisdom: Int,
     val Charisma: Int,
     val Acrobatics: Int,
+    val Athletics: Int,
     val Deception: Int,
     val History: Int,
     val Insight: Int,

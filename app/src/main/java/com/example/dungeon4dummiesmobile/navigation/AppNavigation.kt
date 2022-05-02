@@ -42,12 +42,25 @@ fun AppNavigation() {
             ProfileScreen(navController, username)
         }
 
-        composable(route = AppScreens.SettingsScreen.route + "/{username}", listOf(navArgument(name = "username") {
+        composable(route = AppScreens.SettingsScreen.route + "/{username}/{characterID}", listOf(navArgument(name = "username") {
             type = NavType.StringType
         })) {
             var username = it.arguments?.getString("username")
             requireNotNull(username)
             SettingsScreen(navController, username)
+        }
+
+        composable(route = AppScreens.CharacterScreen.route + "/{username}/{characterID}", listOf(
+            navArgument(name = "username") {
+                type = NavType.StringType },
+            navArgument(name = "characterID") {
+                type = NavType.StringType
+            })) {
+            var username = it.arguments?.getString("username")
+            var characterID = it.arguments?.getString("characterID")
+            requireNotNull(username)
+            requireNotNull(characterID)
+            CharacterScreen(navController, username, characterID)
         }
     }
 }

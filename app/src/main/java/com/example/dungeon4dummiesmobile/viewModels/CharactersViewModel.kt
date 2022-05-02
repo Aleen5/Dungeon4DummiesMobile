@@ -14,13 +14,13 @@ import retrofit2.Response
 
 class CharactersViewModel: ViewModel() {
     var charactersModelListResponse: List<CharactersModel> by mutableStateOf(listOf())
-    var charactersModel: CharactersModel by mutableStateOf(CharactersModel("uwuid", "uwuid", "uwuname", "uwusurname",
-        "uwualias", "uwustatus", "uwurace", "uwualignment", 10, 4000, "uwuclass", "uwuarch",
+    var charactersModel: CharactersModel by mutableStateOf(CharactersModel("", "", "", "",
+        "", "", "", "", 10, 4000, "", "",
         StatsModel(25, 20, 30, 25, 30, 15, 20, 30, 10, 20,
-            10, 30, 35, 10, 20, 25, 20, 10, 10, 50, 30, 35),
+            10, 30, 0,35, 10, 20, 25, 20, 10, 10, 50, 30, 35),
         35, 20, 0, 20, 15, mutableListOf("10/30/40: XD", "11/30/40: XD2"), mutableListOf("XD: XD", "XDXD: XDXDXD"),
-        mutableListOf("XD", "XDXD", "XD"), 3, mutableListOf("XD", "XD2"), "uwubackstory", "uwuideals",
-        "uwuproficiencies", "uwuavatar", "a"))
+        mutableListOf("", "", ""), 3, mutableListOf("", ""), "", "",
+        "", "", "", "", "", "", 23, ""))
     private var errorMessage: String by mutableStateOf("")
 
     fun getCharactersList() {
@@ -43,6 +43,7 @@ class CharactersViewModel: ViewModel() {
                 val character = apiServices.getCharacter(id)
                 if (character.isSuccessful) {
                     onComplete(character.body()!!)
+                    charactersModel = character.body()!!
                 } else {
                     onComplete(null)
                 }

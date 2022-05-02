@@ -68,7 +68,8 @@ fun TopBarExtended(barText: String, scope: CoroutineScope, scaffoldState: Scaffo
 fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController, username: String) {
     val items = listOf(
         DrawerNavigation.Profile,
-        DrawerNavigation.Settings
+        DrawerNavigation.Settings,
+        DrawerNavigation.Log_Out
     )
     Column (
         modifier = Modifier.background(colorResource(id = R.color.MAINCOLOR))
@@ -91,14 +92,18 @@ fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: N
         val currentRoute = navBackStackEntry?.destination?.route
         items.forEach { item ->
             DrawerItem(item = item, selected = currentRoute == item.route, onItemClick = {
-                navController.navigate(item.route + "/${username}") {
-                    navController.graph.startDestinationRoute?.let { route ->
-                        popUpTo(route) {
-                            saveState = true
+                if (item.title == "Log out")
+                    navController.navigate(item.route)
+                else {
+                    navController.navigate(item.route + "/${username}") {
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
                         }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                    launchSingleTop = true
-                    restoreState = true
                 }
 
                 scope.launch {

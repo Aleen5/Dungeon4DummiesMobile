@@ -30,5 +30,10 @@ data class CharactersModel(
     val ideals: String,
     val proficiencies: String,
     val avatar: String,
+    val flaws: String,
+    val personality_traits: String,
+    val bonds: String,
+    val languages: String,
+    val age: Int,
     val owner: String
 )

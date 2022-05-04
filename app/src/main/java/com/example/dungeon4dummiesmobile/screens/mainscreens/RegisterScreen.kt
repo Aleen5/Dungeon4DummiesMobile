@@ -84,18 +84,8 @@ fun RegisterScreen(navController: NavController) {
                     }
                 }
             }
-
-            /* Lazy Column DJ Example
-           LazyColumn() {
-               items(UsersModel.usersArray) { user ->
-                   Text(text = user.username)
-               }
-           }
-             */
         }
-
     }
-
 }
 
 @Composable

@@ -1,26 +1,27 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
-import android.util.Log
-import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.dungeon4dummiesmobile.models.UsersModel
-import com.example.dungeon4dummiesmobile.navigation.AppScreens
+import com.example.dungeon4dummiesmobile.R
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
-import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
-import kotlinx.coroutines.currentCoroutineContext
+import kotlin.random.Random
 
 @Composable
 fun HomeScreen(navController: NavController, username: String) {
@@ -30,6 +31,11 @@ fun HomeScreen(navController: NavController, username: String) {
     var user by remember {
         mutableStateOf(usersViewModel.user)
     }
+
+    val tips = listOf("You don't have to know every rule", "Don't plan too much", "Things aren't written in stone",
+        "The rules are only a guide", "Don't attack your Dungeon Master!", "Always keep close your player's handbook",
+        "Take your time to write notes", "Always roleplay according to your character's backstory and behavior",
+        "Meta-gaming is a sin", "People die if they are killed", "What happens, happens. And there's no turning back.")
 
     var getData by remember {
         mutableStateOf(true)
@@ -53,6 +59,22 @@ fun HomeScreen(navController: NavController, username: String) {
         },
         scaffoldState = scaffoldState
     ){
-        Text(text = "Welcome back, ${user.username}.")
+        Column(modifier = Modifier.padding(top = 10.dp, end = 10.dp, start = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Welcome back, ")
+                Text(text = "${user.username}!", fontSize = 18.sp, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold)
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(modifier = Modifier.fillMaxWidth()) { Text(text = "Here's your random D&D tip:", fontSize = 18.sp) }
+            Spacer(modifier = Modifier.height(70.dp))
+            Row() { Text(text = "${tips[Random.nextInt(tips.size)]}", textAlign = TextAlign.Center ,fontSize = 34.sp, fontFamily = FontFamily.Cursive)}
+
+            Spacer(modifier = Modifier.height(30.dp))
+            Image(painterResource(id = R.drawable.dungeon4dummieslogotextless), contentDescription = "",
+            modifier = Modifier.width(120.dp).height(120.dp))
+        }
+
+
+
     }
 }

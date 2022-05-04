@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.R
@@ -82,7 +83,7 @@ fun CharacterCard(navController: NavController, character: CharactersModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 5.dp, bottom = 15.dp)
+            .padding(top = 8.dp, bottom = 18.dp)
             .clickable {
                 navController.navigate(route = AppScreens.CharacterScreen.route + "/${character.owner}/${character.id}")
             }
@@ -92,15 +93,17 @@ fun CharacterCard(navController: NavController, character: CharactersModel) {
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.dungeon4dummieslogo),
+                painter = painterResource(id = R.drawable.dungeon4dummieslogotextless),
                 "Character_Avatar",
                 modifier = Modifier
-                    .width(80.dp)
-                    .height(80.dp))
+                    .width(60.dp)
+                    .height(60.dp)
+                    .padding(7.dp))
             Column {
-                Text("${character.alias}")
-                Text("Lvl ${character.level} ${character.character_class} ${character.archetype}")
-                Text("Status: ${character.status} HP: ${character.current_hp}/${character.max_hp} Mana: ${character.current_mana}/${character.max_mana}")
+                Text("${character.alias}", modifier = Modifier.padding(top = 5.dp))
+                Text("Lvl ${character.level}  ${character.character_class} ${character.archetype}")
+                Text("Status: ${character.status}  HP: ${character.current_hp}/${character.max_hp}  Mana: ${character.current_mana}/${character.max_mana}",
+                modifier = Modifier.padding(bottom = 5.dp))
             }
         }
     }
@@ -111,6 +114,11 @@ fun CreateCharacterScreenButton(navController: NavController, username: String) 
     Button(onClick = {
         navController.navigate(route = AppScreens.CharacterCreationScreen.route + "/$username")
     }) {
-        Text("Create a new character")
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Icon(painterResource(id = R.drawable.plus), "", modifier = Modifier.height(25.dp).width(25.dp))
+            Spacer(modifier = Modifier.width(10.dp))
+            Text("Create a new character", fontSize = 18.sp)
+        }
+
     }
 }

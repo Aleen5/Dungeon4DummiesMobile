@@ -68,7 +68,7 @@ fun AppNavigation() {
         })) {
             var username = it.arguments?.getString("username")
             requireNotNull(username)
-            SettingsScreen(navController, username)
+            CharacterCreationScreen(navController, username)
         }
     }
 }

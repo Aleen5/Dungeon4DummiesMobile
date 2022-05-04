@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.dungeon4dummiesmobile.models.CharactersModel
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
@@ -32,6 +33,15 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
 
     var character by remember {
         mutableStateOf(charactersViewModel.charactersModel)
+    }
+
+    var spoilerlessCharacter by remember {
+            mutableStateOf(CharactersModel(character.id, character.id, "Spoily", "Spoiler",  character.alias, "Spoiler",
+            character.race, "The alignment of a spoily man", character.level, character.exp, character.character_class,
+            character.archetype, character.stats, 55555, 55555, 55555, 55555, character.current_mana,
+            mutableListOf("Spoiler", "Spoiler"), character.attacks_sorceries, mutableListOf("Spoiler", "Spoiler"),151123, mutableListOf("Spoiler Item 1", "Spoiler Item 2"), "The spoiled backstory is not a good backstory",
+            "Those ideals must be a huge spoiler", "Proficient in spoilerness", "", "Spoling",
+        "Can't resist spoilers", "Bond negative with spoilers", "Spoilven", 5661612, character.owner))
     }
 
     var getData by remember {
@@ -195,3 +205,7 @@ fun SubstatsList(substats: StatsModel) {
     StatsArrayItem(statName = "Survival: ${substats.Survival}")
     StatsArrayItem(statName = "Animal Handling: ${substats.AnimalHandling}")
 }
+
+// ICONS FOR STATS
+
+// https://materialdesignicons.com/icon/gamepad

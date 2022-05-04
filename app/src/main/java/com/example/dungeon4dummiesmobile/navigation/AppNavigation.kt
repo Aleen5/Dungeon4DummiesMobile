@@ -62,5 +62,13 @@ fun AppNavigation() {
             requireNotNull(characterID)
             CharacterScreen(navController, username, characterID)
         }
+
+        composable(route = AppScreens.CharacterCreationScreen.route + "/{username}", listOf(navArgument(name = "username") {
+            type = NavType.StringType
+        })) {
+            var username = it.arguments?.getString("username")
+            requireNotNull(username)
+            SettingsScreen(navController, username)
+        }
     }
 }

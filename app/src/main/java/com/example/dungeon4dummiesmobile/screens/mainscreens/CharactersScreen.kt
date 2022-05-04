@@ -64,9 +64,14 @@ fun CharactersScreen(navController: NavController, username: String) {
                 items(charactersList) { character ->
                     CharacterCard(navController, character)
                 }
+                item { CreateCharacterScreenButton(navController = navController, username = username) }
+                item { Spacer(modifier = Modifier.height(40.dp)) }
             }
         } else {
-            //Text(text = "Nothing to show here.", modifier = Modifier.padding(top = 40.dp))
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "Nothing to show here. Maybe create a new character?", modifier = Modifier.padding(top = 40.dp))
+                CreateCharacterScreenButton(navController = navController, username = username)
+            }
         }
     }
 }
@@ -75,9 +80,12 @@ fun CharactersScreen(navController: NavController, username: String) {
 fun CharacterCard(navController: NavController, character: CharactersModel) {
     val context = LocalContext.current
     Card(
-        modifier = Modifier.fillMaxWidth().padding(top = 5.dp, bottom = 15.dp).clickable {
-            navController.navigate(route = AppScreens.CharacterScreen.route + "/${character.owner}/${character.id}")
-        }
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 5.dp, bottom = 15.dp)
+            .clickable {
+                navController.navigate(route = AppScreens.CharacterScreen.route + "/${character.owner}/${character.id}")
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -86,12 +94,23 @@ fun CharacterCard(navController: NavController, character: CharactersModel) {
             Image(
                 painter = painterResource(id = R.drawable.dungeon4dummieslogo),
                 "Character_Avatar",
-                modifier = Modifier.width(80.dp).height(80.dp))
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(80.dp))
             Column {
                 Text("${character.alias}")
                 Text("Lvl ${character.level} ${character.character_class} ${character.archetype}")
                 Text("Status: ${character.status} HP: ${character.current_hp}/${character.max_hp} Mana: ${character.current_mana}/${character.max_mana}")
             }
         }
+    }
+}
+
+@Composable
+fun CreateCharacterScreenButton(navController: NavController, username: String) {
+    Button(onClick = {
+        navController.navigate(route = AppScreens.CharacterCreationScreen.route + "/$username")
+    }) {
+        Text("Create a new character")
     }
 }

@@ -55,7 +55,6 @@ fun TopBarExtended(barText: String, scope: CoroutineScope, scaffoldState: Scaffo
             IconButton(onClick = {
                 scope.launch {
                     scaffoldState.drawerState.open()
-                    Log.d("LOL", "XD2")
                 }
             }) {
                 Icon(Icons.Filled.Menu, "")

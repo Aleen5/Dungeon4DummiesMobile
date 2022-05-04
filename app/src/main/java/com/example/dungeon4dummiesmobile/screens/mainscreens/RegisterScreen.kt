@@ -57,7 +57,7 @@ fun RegisterScreen(navController: NavController) {
 
         topBar = { TopBar(barText = "Register")},
 
-        ) { contentPadding ->
+        ) {
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -110,6 +110,7 @@ fun RegisterButton(navController: NavController, name: String, surname: String, 
         modifier = Modifier
             .width(100.dp)
             .padding(vertical = 15.dp),
+        colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR),
         onClick = {
             // Field checks
             if (name == "" || name == " " || name == null) {
@@ -151,8 +152,7 @@ fun RegisterButton(navController: NavController, name: String, surname: String, 
             }
             showDialogLoading.value = false
             //navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser.username}")
-        },
-        colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR)
+        }
     ) {
         Text(text = "Register")
     }

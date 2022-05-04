@@ -1,5 +1,6 @@
 package com.example.dungeon4dummiesmobile.screens.shared
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -54,6 +55,7 @@ fun TopBarExtended(barText: String, scope: CoroutineScope, scaffoldState: Scaffo
             IconButton(onClick = {
                 scope.launch {
                     scaffoldState.drawerState.open()
+                    Log.d("LOL", "XD2")
                 }
             }) {
                 Icon(Icons.Filled.Menu, "")

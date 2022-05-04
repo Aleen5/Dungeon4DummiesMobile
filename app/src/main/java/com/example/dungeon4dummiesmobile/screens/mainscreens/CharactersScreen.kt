@@ -1,8 +1,6 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
-import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,9 +20,7 @@ import com.example.dungeon4dummiesmobile.navigation.AppScreens
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
-import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
-import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 
 @Composable
 fun CharactersScreen(navController: NavController, username: String) {
@@ -51,11 +47,12 @@ fun CharactersScreen(navController: NavController, username: String) {
 
     Scaffold(
         topBar = { TopBarExtended(barText = "Characters", scope = scope, scaffoldState = scaffoldState) },
-        bottomBar = { BottomBar(navController, username!!) },
+        bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
         drawerContent = {
-            Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username!!)
-        }
+            Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username)
+        },
+        scaffoldState = scaffoldState
     ) {
         Spacer(modifier = Modifier.padding(top = 40.dp))
         if (!charactersList.isEmpty()) {

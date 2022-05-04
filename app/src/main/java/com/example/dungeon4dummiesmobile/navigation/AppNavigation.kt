@@ -42,7 +42,7 @@ fun AppNavigation() {
             ProfileScreen(navController, username)
         }
 
-        composable(route = AppScreens.SettingsScreen.route + "/{username}/{characterID}", listOf(navArgument(name = "username") {
+        composable(route = AppScreens.SettingsScreen.route + "/{username}", listOf(navArgument(name = "username") {
             type = NavType.StringType
         })) {
             var username = it.arguments?.getString("username")

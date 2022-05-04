@@ -17,11 +17,12 @@ fun SettingsScreen(navController: NavController, username: String) {
     val scope = rememberCoroutineScope()
     Scaffold(
         topBar = { TopBarExtended(barText = "Settings", scope = scope, scaffoldState = scaffoldState) },
-        bottomBar = { BottomBar(navController, "TODO") },
+        bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
         drawerContent = {
-            Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username!!)
-        }
+            Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username)
+        },
+        scaffoldState = scaffoldState
     ){
         username?.let { Text(text = it, modifier = Modifier.padding(top = 40.dp))}
     }

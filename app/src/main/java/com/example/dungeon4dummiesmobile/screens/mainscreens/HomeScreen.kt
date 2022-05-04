@@ -25,8 +25,7 @@ import kotlinx.coroutines.currentCoroutineContext
 @Composable
 fun HomeScreen(navController: NavController, username: String) {
     val usersViewModel = viewModel(UsersViewModel::class.java)
-    val charactersViewModel = viewModel(CharactersViewModel::class.java)
-    val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     var user by remember {
         mutableStateOf(usersViewModel.user)
@@ -42,7 +41,6 @@ fun HomeScreen(navController: NavController, username: String) {
             usersViewModel.get1User(username) {
                 user = usersViewModel.user
             }
-            charactersViewModel.getUsersCharacters(username) {}
         }
     }
 
@@ -52,8 +50,9 @@ fun HomeScreen(navController: NavController, username: String) {
         drawerGesturesEnabled = true,
         drawerContent = {
             Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username)
-        }
+        },
+        scaffoldState = scaffoldState
     ){
-        Text(text = user.username)
+        Text(text = "Welcome back, ${user.username}.")
     }
 }

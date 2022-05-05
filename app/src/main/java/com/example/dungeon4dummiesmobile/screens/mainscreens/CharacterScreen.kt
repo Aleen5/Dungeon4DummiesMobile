@@ -187,7 +187,7 @@ fun SubstatsList(substats: StatsModel) {
     StatsArrayItem(statName = "Armor Class: ${substats.ArmorClass}", painterResource(id = R.drawable.shield))
     StatsArrayItem(statName = "Initiative: ${substats.Initiative} ${modifier(substats.Initiative)}", painterResource(id = R.drawable.initiative))
     StatsArrayItem(statName = "Strength: ${substats.Strength} ${modifier(substats.Strength)}", painterResource(id = R.drawable.strength))
-    StatsArrayItem(statName = "Dexterity: ${substats.Dexterty} ${modifier(substats.Dexterty)}", painterResource(id = R.drawable.karate))
+    StatsArrayItem(statName = "Dexterity: ${substats.Dexterity} ${modifier(substats.Dexterity)}", painterResource(id = R.drawable.karate))
     StatsArrayItem(statName = "Constitution: ${substats.Constitution} ${modifier(substats.Constitution)}", painterResource(id = R.drawable.heart))
     StatsArrayItem(statName = "Intelligence: ${substats.Intelligence} ${modifier(substats.Intelligence)}", painterResource(id = R.drawable.idea))
     StatsArrayItem(statName = "Wisdom: ${substats.Wisdom} ${modifier(substats.Wisdom)}", painterResource(id = R.drawable.brain))
@@ -211,7 +211,7 @@ fun SubstatsList(substats: StatsModel) {
 
 fun modifier(value: Int): String {
     return when(value) {
-        30 -> "(+10)"
+        in 30..99 -> "(+10)"
         in 28..29 -> "(+9)"
         in 26..27 -> "(+8)"
         in 24..25 -> "(+7)"
@@ -226,7 +226,7 @@ fun modifier(value: Int): String {
         in 6..7 -> "(-2)"
         in 4..5 -> "(-3)"
         in 2..3 -> "(-4)"
-        1 -> "(-5)"
+        in -99..1 -> "(-5)"
         else -> "(+0)"
     }
 }

@@ -2,7 +2,7 @@ data class StatsModel(
     val ArmorClass: Int,
     val Initiative: Int,
     val Strength: Int,
-    val Dexterty: Int,
+    val Dexterity: Int,
     val Constitution: Int,
     val Intelligence: Int,
     val Wisdom: Int,

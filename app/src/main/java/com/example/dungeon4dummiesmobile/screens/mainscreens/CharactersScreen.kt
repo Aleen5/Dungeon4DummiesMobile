@@ -123,7 +123,8 @@ fun CharacterCard(navController: NavController, character: CharactersModel) {
                     } else {
                         Text("${character.status}", color = Color.Yellow, fontStyle = FontStyle.Italic)
                     }
-                    Spacer(modifier = Modifier.width(6.dp))
+                }
+                Row() {
                     Icon(painterResource(id = R.drawable.heart), "HP", tint = Color.Red)
                     Spacer(modifier = Modifier.width(5.dp))
                     Text("HP: ${character.current_hp}/${character.max_hp}",

@@ -1,5 +1,6 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
+import StatsModel
 import android.widget.EditText
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import com.example.dungeon4dummiesmobile.models.CharactersModel
 import com.example.dungeon4dummiesmobile.navigation.AppScreens
 import com.example.dungeon4dummiesmobile.screens.shared.*
 import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
+import com.example.dungeon4dummiesmobile.ui.theme.SECONDARYCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 
@@ -40,12 +42,19 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
     val charactersViewModel = viewModel(CharactersViewModel::class.java)
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
+    val showDialogLoading = remember {
+        mutableStateOf(false)
+    }
+
     var racesListExpanded by remember { mutableStateOf(false) }
     var racesListSelectedIndex by remember { mutableStateOf(0) }
+
     var classesListExpanded by remember { mutableStateOf(false) }
     var classesListSelectedIndex by remember { mutableStateOf(0) }
+
     var alignmentsListExpanded by remember { mutableStateOf(false) }
     var alignmentsListSelectedIndex by remember { mutableStateOf(0) }
+
     val scope = rememberCoroutineScope()
     var user by remember {
         mutableStateOf(usersViewModel.user)
@@ -56,8 +65,10 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
     var stats by remember {
         mutableStateOf(value = charactersViewModel.statsModel)
     }
+
+    val maxPossibleStatLevel = 100
     
-    val races = listOf("Dragonborn", "Dwarf", "Elf", "Gnome", "Half-Elf", "Halfling", "Half-Orc",
+    val races = listOf("Select your race", "Dragonborn", "Dwarf", "Elf", "Gnome", "Half-Elf", "Halfling", "Half-Orc",
         "Human", "Tiefling", "Orc of Exandria", "Leonin", "Satyr", "Fairy", "Harengon", "Owlin",
         "Aarakocra", "Genasi", "Goliath", "Aasimar", "Bugbear", "Firbolg", "Goblin", "Hobgoblin",
         "Kenku", "Kobold", "Lizardfolk", "Orc", "Tabaxi", "Triton", "Yuan-ti Pureblood",
@@ -65,10 +76,10 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
         "Warforged", "Gith", "Centaur", "Loxodon", "Minotaur", "Simic Hybrid", "Vedalken", "Verdan",
         "Locathah", "Grung")
 
-    val classes = listOf("Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Rogue",
+    val classes = listOf("Select your class", "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Rogue",
         "Sorcerer", "Warlock", "Wizard", "Artificer", "Blood Hunter", "Ranger")
 
-    val alignments = listOf("Lawful-Good", "Lawful-Neutral", "Lawful-Evil", "Neutral-Good", "True-Neutral",
+    val alignments = listOf("Select your alignment", "Lawful-Good", "Lawful-Neutral", "Lawful-Evil", "Neutral-Good", "True-Neutral",
         "Neutral-Evil", "Chaotic-Good", "Chaotic-Neutral", "Chaotic-Evil")
 
     var name by remember {
@@ -87,7 +98,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
         mutableStateOf(races[racesListSelectedIndex])
     }
     var characterClass by remember {
-        mutableStateOf(races[classesListSelectedIndex])
+        mutableStateOf(classes[classesListSelectedIndex])
     }
     var alignment by remember {
         mutableStateOf(alignments[alignmentsListSelectedIndex])
@@ -98,6 +109,9 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
     var exp by remember {
         mutableStateOf(0)
     }
+    var age by remember {
+        mutableStateOf(20)
+    }
     var archetype by remember {
         mutableStateOf("")
     }
@@ -105,6 +119,13 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
         mutableStateOf(mutableListOf(""))
     }
     var stringInventory by remember {
+        mutableStateOf("")
+    }
+
+    var attacksSorceries by remember {
+        mutableStateOf(mutableListOf(""))
+    }
+    var stringAttacksSorceries by remember {
         mutableStateOf("")
     }
     var armorClass by remember {
@@ -325,6 +346,9 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             NumericInput(label = "Exp", number = exp, onValueChange = {exp = it})
                         }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            NumericInput(label = "Age", number = age, onValueChange = {age = it})
+                        }
                     } }
                     item { InputTextField("Archetype", archetype, onValueChange = {archetype = it}) }
                     item { LongInputTextField(label = "Inventory (separate items with [ ; ])", inValue = stringInventory, onValueChange = {stringInventory = it})}
@@ -505,6 +529,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     } }
 
                     item { LongInputTextField(label = "Features & Traits (separate items with [ ; ])", inValue = stringFeaturesTraits, onValueChange = {stringFeaturesTraits = it})}
+                    item { LongInputTextField(label = "Attacks & Sorceries (separate items with [ ; ])", inValue = stringAttacksSorceries, onValueChange = {stringAttacksSorceries = it})}
                     item { LongInputTextField(label = "Backstory", inValue = backstory, onValueChange = {backstory = it})}
                     item { LongInputTextField(label = "Ideals", inValue = ideals, onValueChange = {ideals = it})}
                     item { LongInputTextField(label = "Proficiencies", inValue = proficiencies, onValueChange = {proficiencies = it})}
@@ -518,17 +543,192 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
 
                     item { Spacer(modifier = Modifier.height(50.dp)) }
 
-                    item { Button(onClick = {
+                    item { Button(
+                        colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR),
+                        onClick = {
                         inventory = trimStringArray(stringInventory.split(";").toMutableList())
+                        attacksSorceries = trimStringArray(stringAttacksSorceries.split(";").toMutableList())
                         featuresTraits = trimStringArray(stringFeaturesTraits.split(";").toMutableList())
-                        Toast.makeText(context, "$race $characterClass $alignment $level $inventory ${inventory.size}", Toast.LENGTH_SHORT).show()
+
+                        //// INICIO COMPROBACIONES ////
+
+                        if (name == "" || name == " ") {
+                            Toast.makeText(context, "Please, name your character. Even if you type [No-name], it would be OK", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (race == "Select your race") {
+                            Toast.makeText(context, "Check your race; it seems that you have not selected it.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (characterClass == "Select your class") {
+                            Toast.makeText(context, "You can't play without a class! Change it.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (alignment == "Select your alignment") {
+                            Toast.makeText(context, "You have to select your alignment.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (level < 1 || level >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Isn't your Level a bit weird? Or are you some overpowered isekai protagonist? Lower it a bit.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (exp < 0 || exp >= 500000) {
+                            Toast.makeText(context, "That's not a valid Exp value. Something between 0 and 500K, is.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (age < 0 || age >= 500000) {
+                            Toast.makeText(context, "You're not that old (or that young). Change your Age.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (armorClass >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "That's way too much Armor Class! Lower it.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (initiative >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Not so fast, Flash! Your Initiative is overly maxed!", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (strength >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "You're not some Baki character. Type a valid Strength value.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (dexterity >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Dexterity is a good stat, but isn't yours a bit too much pumped? Tone it down a bit.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (constitution >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Are you pretending to be made of rock? Put some real values in that Constitution.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (intelligence >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Let's be realistic, you aren't that much intelligent if you thought that Intelligence value would pass the filter.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (wisdom >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Not even Odin was so wise. Chill down that Wisdom value.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (charisma >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Come on, not even King Gilgamesh had that Charisma level. Fix it.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (acrobatics >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "That Acrobatics level is just too high. Change it.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (athletics >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "You are not so fit. Lower your Athletics level.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (deception >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "I won't swallow this lie. Maybe your Deception level was not high enough? Nah man, tone it down.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (history >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Even if you were born on the dawn of humanity, you would not have that History level. Change it.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (insight >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Okay, I get it, you want to be a scientist. But you'll have to make your path there. Tone down your Insight.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (intimidation >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "I'm not scared to tell you that your Intimidation level is too high.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (performance >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Tone down that Performance level and go watch some actual good movies like Lord of the Rings.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (medicine >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Are you pretending to be Asclepius? Lower your Medicine level.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (nature >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "I am Lorax. I speak for the trees. And the trees say: Can you lower your Nature level?", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (perception >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "You did not perceive this error. Lower your Perception level.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (persuasion >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Your Persuasion level is too high and I'm not gonna turn back on this, no matter how much you insist.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (religion >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "For God's sake, tone down that Religion level.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (stealth >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Your Stealth level is so high it ain't stealthy anymore. Tone it down.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (survival >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "The Last Survivor aired so much ago. Tone down that Survival level.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (animalHandling >= maxPossibleStatLevel) {
+                            Toast.makeText(context, "Be nice to animals, but not so much. Tone down that Animal Handling level.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (maxHP < 0 || maxHP >= 500) {
+                            Toast.makeText(context, "That's not a valid HP value.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        } else if (maxMP < 0 || maxMP >= 500) {
+                            Toast.makeText(context, "That's not a valid MP value.", Toast.LENGTH_LONG).show()
+                            return@Button
+                        }
+                        showDialogLoading.value = true
+
+                        character = CharactersModel(
+                            _id = "",
+                            id = "",
+                            name = name,
+                            surname = surname,
+                            alias = alias,
+                            character_class = characterClass,
+                            status = status,
+                            race = race,
+                            alignment = alignment,
+                            level = level,
+                            exp = exp,
+                            archetype = archetype,
+                            inventory = inventory,
+                            max_hp = maxHP,
+                            current_hp = currentHP,
+                            temporal_hp = temporalHP,
+                            max_mana = maxMP,
+                            current_mana = currentMP,
+                            adventure_journal = adventureJournal,
+                            features_traits = featuresTraits,
+                            death_saves = deathSaves,
+                            backstory = backstory,
+                            ideals = ideals,
+                            proficiencies = proficiencies,
+                            flaws = flaws,
+                            personality_traits = personalityTraits,
+                            bonds = bonds,
+                            age = age,
+                            avatar = avatar,
+                            languages = languages,
+                            attacks_sorceries = attacksSorceries,
+                            owner = user.username,
+
+                            stats = StatsModel(
+                                ArmorClass = armorClass,
+                                Initiative = initiative,
+                                Strength = strength,
+                                Dexterity = dexterity,
+                                Constitution = constitution,
+                                Intelligence = intelligence,
+                                Wisdom = wisdom,
+                                Charisma = charisma,
+                                Acrobatics = acrobatics,
+                                Athletics = athletics,
+                                Deception = deception,
+                                History = history,
+                                Insight = insight,
+                                Intimidation = intimidation,
+                                Performance = performance,
+                                Medicine = medicine,
+                                Nature = nature,
+                                Perception = perception,
+                                Persuasion = persuasion,
+                                Religion = religion,
+                                Stealth = stealth,
+                                Survival = survival,
+                                AnimalHandling = animalHandling
+                            )
+                        )
+
+                        // POST
+
+                        charactersViewModel.postCharacter(character)
+                        showDialogLoading.value = false
+
+                        navController.navigate(route = AppScreens.CharactersScreen.route + "/${username}")
+
                     }) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painter = painterResource(R.drawable.d20), "", tint = Color.Cyan,
                             modifier = Modifier.height(50.dp).width(50.dp))
                             Text(text = "Create Character")
                         }
-                    }}
+                    }
+                    DialogLoading(showDialogLoading)
+                    }
+
                     item { Spacer(modifier = Modifier.height(50.dp)) }
                 }
             }
@@ -540,6 +740,3 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
 fun trimStringArray(array: MutableList<String>): MutableList<String> {
     return array.map{it.trim()}.toMutableList()
 }
-
-
-

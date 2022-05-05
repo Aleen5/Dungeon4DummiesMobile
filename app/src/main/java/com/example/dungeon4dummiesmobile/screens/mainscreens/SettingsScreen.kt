@@ -24,7 +24,6 @@ fun SettingsScreen(navController: NavController, username: String) {
         },
         scaffoldState = scaffoldState
     ){
-        username?.let { Text(text = it, modifier = Modifier.padding(top = 40.dp))}
+        Text(text = username, modifier = Modifier.padding(top = 40.dp))
     }
-    //username?.let { Text(text = it, modifier = Modifier.padding(top = 40.dp)) }
 }

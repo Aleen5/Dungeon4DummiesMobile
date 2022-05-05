@@ -9,8 +9,15 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -79,7 +86,6 @@ fun CharactersScreen(navController: NavController, username: String) {
 
 @Composable
 fun CharacterCard(navController: NavController, character: CharactersModel) {
-    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,10 +106,35 @@ fun CharacterCard(navController: NavController, character: CharactersModel) {
                     .height(60.dp)
                     .padding(7.dp))
             Column {
-                Text("${character.alias}", modifier = Modifier.padding(top = 5.dp))
-                Text("Lvl ${character.level}  ${character.character_class} ${character.archetype}")
-                Text("Status: ${character.status}  HP: ${character.current_hp}/${character.max_hp}  Mana: ${character.current_mana}/${character.max_mana}",
-                modifier = Modifier.padding(bottom = 5.dp))
+                Row() { Text("${character.alias}", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 5.dp)) }
+                Row() {
+                    Text("Lvl ${character.level}")
+                    Spacer(modifier = Modifier.width(15.dp))
+                    ClassIcon(characterClass = character.character_class)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("${character.character_class} ${character.archetype}")
+                }
+                Row() {
+                    Text(text = "Status: ")
+                    if (character.status.toLowerCase() == "alive") {
+                        Text("${character.status}", color = Color.Green, fontStyle = FontStyle.Italic)
+                    } else if(character.status.toLowerCase() == "dead") {
+                        Text("${character.status}", color = Color.Red, fontStyle = FontStyle.Italic)
+                    } else {
+                        Text("${character.status}", color = Color.Yellow, fontStyle = FontStyle.Italic)
+                    }
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(painterResource(id = R.drawable.heart), "HP", tint = Color.Red)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("HP: ${character.current_hp}/${character.max_hp}",
+                        modifier = Modifier.padding(bottom = 5.dp))
+
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Icon(painterResource(id = R.drawable.flask), "MP", tint = Color.Blue)
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text("Mana: ${character.current_mana}/${character.max_mana}",
+                        modifier = Modifier.padding(bottom = 5.dp))
+                }
             }
         }
     }
@@ -114,11 +145,39 @@ fun CreateCharacterScreenButton(navController: NavController, username: String) 
     Button(onClick = {
         navController.navigate(route = AppScreens.CharacterCreationScreen.route + "/$username")
     }) {
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Icon(painterResource(id = R.drawable.plus), "", modifier = Modifier.height(25.dp).width(25.dp))
-            Spacer(modifier = Modifier.width(10.dp))
-            Text("Create a new character", fontSize = 18.sp)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Icon(painterResource(id = R.drawable.plus), "", modifier = Modifier
+                    .height(25.dp)
+                    .width(25.dp))
+                Spacer(modifier = Modifier.width(10.dp))
+                Text("Create a new character", fontSize = 18.sp, textAlign = TextAlign.Center)
+            }
         }
-
     }
+}
+
+@Composable
+fun ClassIcon(characterClass: String) {
+    var painter = painterResource(id = R.drawable.list)
+
+    when(characterClass.toLowerCase()) {
+        "warrior" -> painter = painterResource(id = R.drawable.sword)
+        "barbarian" -> painter = painterResource(id = R.drawable.axe)
+        "bard" -> painter = painterResource(id = R.drawable.guitar)
+        "cleric" -> painter = painterResource(id = R.drawable.cross)
+        "druid" -> painter = painterResource(id = R.drawable.cat)
+        "fighter" -> painter = painterResource(id = R.drawable.karate)
+        "monk" -> painter = painterResource(id = R.drawable.temple)
+        "paladin" -> painter = painterResource(id = R.drawable.mace)
+        "rogue" -> painter = painterResource(id = R.drawable.knife)
+        "sorcerer" -> painter = painterResource(id = R.drawable.staff)
+        "warlock" -> painter = painterResource(id = R.drawable.crystalball)
+        "wizard" -> painter = painterResource(id = R.drawable.wizardhat)
+        "artificer" -> painter = painterResource(id = R.drawable.bomb)
+        "blood hunter" -> painter = painterResource(id = R.drawable.sword)
+        "ranger" -> painter = painterResource(id = R.drawable.bow)
+        else -> painterResource(id = R.drawable.list)
+    }
+    Icon(painter = painter, "", tint = Color.LightGray)
 }

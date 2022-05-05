@@ -20,6 +20,7 @@ import com.example.dungeon4dummiesmobile.models.CharactersModel
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
+import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 
 @Composable
@@ -84,7 +85,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 item { StatsText(statName = "Archetype", statValue = character.archetype) }
                 item { StatText(statName = "Inventory", painterResource(id = R.drawable.inventory))}
                 items(character.inventory) { item ->
-                    StatsArrayItem(statName = item, painterResource(id = R.drawable.bag))
+                    StatsArrayItem(statName = item, painterResource(id = R.drawable.chest))
                 }
                 item { StatText(statName = "Attacks & Sorceries")}
                 items(character.attacks_sorceries) { attack ->
@@ -109,7 +110,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 item { StatsText(statName = "Flaws", statValue = character.flaws) }
                 item { StatsText(statName = "Personality Traits", statValue = character.personality_traits) }
                 item { StatsText(statName = "Bonds", statValue = character.bonds) }
-                item { StatsNumber(statName = "Archetype", statValue = character.age) }
+                item { StatsNumber(statName = "Age", statValue = character.age) }
                 item { StatsText(statName = "Languages", statValue = character.languages) }
                 item { StatsText(statName = "Avatar (link)", statValue = character.avatar) }
                 item { Spacer(modifier = Modifier.height(40.dp))}
@@ -126,7 +127,7 @@ fun StatsText(statName: String, statValue: String, painter: Painter = painterRes
         Text(
             text = "$statName:  ",
             fontWeight = FontWeight.Bold,
-            color = Color.Yellow
+            color = MAINCOLOR
         )
         Text(
             text = statValue,
@@ -144,7 +145,7 @@ fun StatsNumber(statName: String, statValue: Int, painter: Painter = painterReso
         Text(
             text = "$statName:  ",
             fontWeight = FontWeight.Bold,
-            color = Color.Yellow
+            color = MAINCOLOR
         )
         Text(
             text = statValue.toString(),
@@ -162,7 +163,7 @@ fun StatText(statName: String, painter: Painter = painterResource(R.drawable.lis
         Text(
             text = "$statName:   ",
             fontWeight = FontWeight.Bold,
-            color = Color.Yellow
+            color = MAINCOLOR
         )
     }
 }
@@ -171,7 +172,7 @@ fun StatText(statName: String, painter: Painter = painterResource(R.drawable.lis
 fun StatsArrayItem(statName: String, painter: Painter = painterResource(R.drawable.list)) {
     Row() {
         Spacer(modifier = Modifier.width(5.dp))
-        Icon(painter, contentDescription = "")
+        Icon(painter, contentDescription = "", tint = Color.LightGray)
         Spacer(modifier = Modifier.width(3.dp))
         Text(
             text = statName,

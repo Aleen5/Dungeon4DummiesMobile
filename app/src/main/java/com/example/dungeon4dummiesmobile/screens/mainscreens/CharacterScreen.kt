@@ -20,6 +20,7 @@ import com.example.dungeon4dummiesmobile.models.CharactersModel
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
+import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtendedWithVisibility
 import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 
@@ -28,19 +29,32 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
     val charactersViewModel = viewModel(CharactersViewModel::class.java)
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
+    var visibility by remember {
+        mutableStateOf(true)
+    }
 
     var character by remember {
         mutableStateOf(charactersViewModel.charactersModel)
     }
 
-    var spoilerlessCharacter by remember {
-            mutableStateOf(CharactersModel(character.id, character.id, "Spoily", "Spoiler",  character.alias, "Spoiler",
-            character.race, "The alignment of a spoily man", character.level, character.exp, character.character_class,
-            character.archetype, character.stats, 55555, 55555, 55555, 55555, 55555,
-            mutableListOf("Spoiler", "Spoiler"), character.attacks_sorceries, mutableListOf("Spoiler", "Spoiler"),151123, mutableListOf("Spoiler Item 1", "Spoiler Item 2"), "The spoiled backstory is not a good backstory",
-            "Those ideals must be a huge spoiler", "Proficient in spoilerness", "", "Spoling",
-        "Can't resist spoilers", "Bond negative with spoilers", "Spoilven", 5661612, character.owner))
+    var backupCharacter by remember {
+        mutableStateOf(charactersViewModel.charactersModel)
     }
+
+    var spoilerCharacter by remember {
+        mutableStateOf(charactersViewModel.charactersSpoilerModel)
+    }
+    spoilerCharacter.alias = backupCharacter.alias
+    spoilerCharacter.character_class = backupCharacter.character_class
+    spoilerCharacter.archetype = backupCharacter.archetype
+
+
+    // Spoiler check
+
+    if (visibility)
+        character = backupCharacter
+    else
+        character = spoilerCharacter
 
     var getData by remember {
         mutableStateOf(true)
@@ -51,12 +65,13 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
             getData = false
             charactersViewModel.get1Character(characterID) {
                 character = it!!
+                backupCharacter = it!!
             }
         }
     }
 
     Scaffold(
-        topBar = { TopBarExtended(barText = "Character: ${character.alias}", scope = scope, scaffoldState = scaffoldState) },
+        topBar = { TopBarExtendedWithVisibility(barText = "Character: ${character.alias}", scope = scope, scaffoldState = scaffoldState, visibility = visibility, onVisibilityClick = {visibility = it}) },
         bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
         drawerContent = {

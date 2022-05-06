@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -64,6 +65,55 @@ fun TopBarExtended(barText: String, scope: CoroutineScope, scaffoldState: Scaffo
         contentColor = Color.White
     )
 }
+
+@Composable
+fun TopBarExtendedWithVisibility(barText: String, scope: CoroutineScope, scaffoldState: ScaffoldState, visibility: Boolean, onVisibilityClick:(visible: Boolean) -> Unit) {
+    TopAppBar(
+        title = {
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                Column() {
+                    Text(
+                        text = barText,
+                        fontSize = 25.sp,
+                        color = Color.Black,
+                        fontFamily = FontFamily.Cursive,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth().padding(end = 30.dp)) {
+                    if (visibility) Icon(
+                        painter = painterResource(id = R.drawable.eye),
+                        "",
+                        tint = Color.LightGray,
+                        modifier = Modifier.size(20.dp).clickable {
+                            onVisibilityClick(false)
+                        }
+                    ) else Icon(
+                        painter = painterResource(id = R.drawable.eyeoff),
+                        "",
+                        tint = Color.LightGray,
+                        modifier = Modifier.size(20.dp).clickable {
+                            onVisibilityClick(true)
+                        }
+                    )
+                }
+            }
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            }) {
+                Icon(Icons.Filled.Menu, "")
+            }
+        },
+        backgroundColor = colorResource(id = R.color.MAINCOLOR),
+        contentColor = Color.White
+    )
+}
+
 
 @Composable
 fun Drawer(scope: CoroutineScope, scaffoldState: ScaffoldState, navController: NavController, username: String) {

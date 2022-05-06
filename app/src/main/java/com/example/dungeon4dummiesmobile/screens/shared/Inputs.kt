@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -42,7 +43,9 @@ fun LongInputTextField(label: String, inValue: String, onValueChange:(textUser: 
         value = inValue,
         onValueChange = { onValueChange(it) },
         label = { Text(label) },
-        modifier = Modifier.padding(16.dp).height(120.dp)
+        modifier = Modifier
+            .padding(16.dp)
+            .height(120.dp)
     )
 }
 
@@ -74,7 +77,7 @@ fun PasswordTextField(label: String, password: String, onValueChange:(textPasswo
 @Composable
 fun NumericInput(label: String, number: Int, onValueChange:(intValue: Int) -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row() {
+        Row {
             TextField(
                 value = number.toString(),
                 onValueChange = {
@@ -82,7 +85,10 @@ fun NumericInput(label: String, number: Int, onValueChange:(intValue: Int) -> Un
                 },
                 label = { Text(label, textAlign = TextAlign.Center, fontSize = 10.sp) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                modifier = Modifier.padding(16.dp).width(100.dp).height(60.dp)
+                modifier = Modifier
+                    .padding(16.dp)
+                    .width(100.dp)
+                    .height(60.dp)
             )
         }
     }
@@ -92,10 +98,10 @@ fun NumericInput(label: String, number: Int, onValueChange:(intValue: Int) -> Un
 fun ComposeMenu(
     menuItems: List<String>,
     menuExpandedState: Boolean,
-    seletedIndex: Int,
+    selectedIndex: Int,
     updateMenuExpandStatus : () -> Unit,
     onDismissMenuView : () -> Unit,
-    onMenuItemclick: (Int) -> Unit,
+    onMenuItemClick: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -120,7 +126,7 @@ fun ComposeMenu(
             val (lable, iconView) = createRefs()
 
             Text(
-                text = menuItems[seletedIndex],
+                text = menuItems[selectedIndex],
                 modifier = Modifier
                     .fillMaxWidth()
                     .constrainAs(lable) {
@@ -160,10 +166,13 @@ fun ComposeMenu(
                     DropdownMenuItem(
                         onClick = {
                             if (index != 0) {
-                                onMenuItemclick(index)
+                                onMenuItemClick(index)
                             }
                         }) {
-                        Text(text = title)
+                        Row(verticalAlignment = CenterVertically) {
+                            BigDropdownListIcon(menuItems[index])
+                            Text(text = title)
+                        }
                     }
                 }
             }
@@ -178,4 +187,29 @@ fun IntegerTryParse(str: String): Int {
     } catch (nfe: NumberFormatException) {
         0
     }
+}
+
+@Composable
+fun BigDropdownListIcon(item: String) {
+    var painter: Painter
+
+    when(item.lowercase()) {
+        "warrior" -> painter = painterResource(id = R.drawable.sword)
+        "barbarian" -> painter = painterResource(id = R.drawable.axe)
+        "bard" -> painter = painterResource(id = R.drawable.guitar)
+        "cleric" -> painter = painterResource(id = R.drawable.cross)
+        "druid" -> painter = painterResource(id = R.drawable.cat)
+        "fighter" -> painter = painterResource(id = R.drawable.karate)
+        "monk" -> painter = painterResource(id = R.drawable.temple)
+        "paladin" -> painter = painterResource(id = R.drawable.mace)
+        "rogue" -> painter = painterResource(id = R.drawable.knife)
+        "sorcerer" -> painter = painterResource(id = R.drawable.staff)
+        "warlock" -> painter = painterResource(id = R.drawable.crystalball)
+        "wizard" -> painter = painterResource(id = R.drawable.wizardhat)
+        "artificer" -> painter = painterResource(id = R.drawable.bomb)
+        "blood hunter" -> painter = painterResource(id = R.drawable.sword)
+        "ranger" -> painter = painterResource(id = R.drawable.bow)
+        else -> painter = painterResource(id = R.drawable.list)
+    }
+    Icon(painter = painter, "", tint = Color.LightGray, modifier = Modifier.size(30.dp).padding(end = 5.dp))
 }

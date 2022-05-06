@@ -1,30 +1,19 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
 import StatsModel
-import android.widget.EditText
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.R
@@ -61,9 +50,6 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
     }
     var character by remember {
         mutableStateOf(value = charactersViewModel.charactersModel)
-    }
-    var stats by remember {
-        mutableStateOf(value = charactersViewModel.statsModel)
     }
 
     val maxPossibleStatLevel = 100
@@ -291,14 +277,14 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     item { ComposeMenu(
                             menuItems = races,
                             menuExpandedState = racesListExpanded,
-                            seletedIndex = racesListSelectedIndex,
+                            selectedIndex = racesListSelectedIndex,
                             updateMenuExpandStatus = {
                                 racesListExpanded = true
                             },
                             onDismissMenuView = {
                                 racesListExpanded = false
                             },
-                            onMenuItemclick = { index->
+                            onMenuItemClick = { index->
                                 racesListSelectedIndex = index
                                 race = races[racesListSelectedIndex]
                                 racesListExpanded = false
@@ -308,14 +294,14 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     item { ComposeMenu(
                         menuItems = classes,
                         menuExpandedState = classesListExpanded,
-                        seletedIndex = classesListSelectedIndex,
+                        selectedIndex = classesListSelectedIndex,
                         updateMenuExpandStatus = {
                             classesListExpanded = true
                         },
                         onDismissMenuView = {
                             classesListExpanded = false
                         },
-                        onMenuItemclick = { index->
+                        onMenuItemClick = { index->
                             classesListSelectedIndex = index
                             characterClass = classes[classesListSelectedIndex]
                             classesListExpanded = false
@@ -325,14 +311,14 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     item { ComposeMenu(
                             menuItems = alignments,
                             menuExpandedState = alignmentsListExpanded,
-                            seletedIndex = alignmentsListSelectedIndex,
+                            selectedIndex = alignmentsListSelectedIndex,
                             updateMenuExpandStatus = {
                                 alignmentsListExpanded = true
                             },
                             onDismissMenuView = {
                                 alignmentsListExpanded = false
                             },
-                            onMenuItemclick = { index->
+                            onMenuItemClick = { index->
                                 alignmentsListSelectedIndex = index
                                 alignment = alignments[alignmentsListSelectedIndex]
                                 alignmentsListExpanded = false
@@ -353,7 +339,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     item { InputTextField("Archetype", archetype, onValueChange = {archetype = it}) }
                     item { LongInputTextField(label = "Inventory (separate items with [ ; ])", inValue = stringInventory, onValueChange = {stringInventory = it})}
                     item { Text(text = "Stats", modifier = Modifier.padding(15.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)}
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.shield), "", modifier = Modifier
                                 .width(40.dp)
@@ -373,7 +359,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Strength", number = strength, onValueChange = {strength = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.karate), "", modifier = Modifier
                                 .width(40.dp)
@@ -393,7 +379,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Intelligence", number = intelligence, onValueChange = {intelligence = it})
                             }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.brain), "", modifier = Modifier
                                 .width(40.dp)
@@ -413,7 +399,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Acrobatics", number = acrobatics, onValueChange = {acrobatics = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.run), "", modifier = Modifier
                                 .width(40.dp)
@@ -433,7 +419,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "History", number = history, onValueChange = {history = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.flask), "", modifier = Modifier
                                 .width(40.dp)
@@ -453,7 +439,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Performance", number = performance, onValueChange = {performance = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.medic), "", modifier = Modifier
                                 .width(40.dp)
@@ -473,7 +459,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Perception", number = perception, onValueChange = {perception = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.persuasion), "", modifier = Modifier
                                 .width(40.dp)
@@ -493,7 +479,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Stealth", number = stealth, onValueChange = {stealth = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.survival), "", modifier = Modifier
                                 .width(40.dp)
@@ -507,7 +493,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Animal Handling", number = animalHandling, onValueChange = {animalHandling = it})
                         }
                     } }
-                    item { Row() {
+                    item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.heart), "", modifier = Modifier
                                 .width(40.dp)

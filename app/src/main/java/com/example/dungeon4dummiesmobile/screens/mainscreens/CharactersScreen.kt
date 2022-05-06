@@ -1,7 +1,7 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import android.widget.Toast
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -22,12 +23,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.example.dungeon4dummiesmobile.R
 import com.example.dungeon4dummiesmobile.models.CharactersModel
 import com.example.dungeon4dummiesmobile.navigation.AppScreens
-import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
-import com.example.dungeon4dummiesmobile.screens.shared.Drawer
-import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
+import com.example.dungeon4dummiesmobile.screens.shared.*
 import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 
 @Composable
@@ -35,6 +35,10 @@ fun CharactersScreen(navController: NavController, username: String) {
     val charactersViewModel = viewModel(CharactersViewModel::class.java)
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
     val scope = rememberCoroutineScope()
+
+    var visibility by remember {
+        mutableStateOf(true)
+    }
 
     var charactersList by remember {
         mutableStateOf(charactersViewModel.charactersModelListResponse)
@@ -54,7 +58,7 @@ fun CharactersScreen(navController: NavController, username: String) {
     }
 
     Scaffold(
-        topBar = { TopBarExtended(barText = "Characters", scope = scope, scaffoldState = scaffoldState) },
+        topBar = { TopBarExtendedWithVisibility(barText = "Characters", scope = scope, scaffoldState = scaffoldState, visibility = visibility, onVisibilityClick = {visibility = it}) },
         bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
         drawerContent = {
@@ -70,7 +74,11 @@ fun CharactersScreen(navController: NavController, username: String) {
                 contentPadding = PaddingValues(16.dp)
             ) {
                 items(charactersList) { character ->
-                    CharacterCard(navController, character)
+                    CharacterCard(
+                        navController = navController,
+                        character = character,
+                        visibility = visibility,
+                    )
                 }
                 item { CreateCharacterScreenButton(navController = navController, username = username) }
                 item { Spacer(modifier = Modifier.height(40.dp)) }
@@ -84,31 +92,55 @@ fun CharactersScreen(navController: NavController, username: String) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CharacterCard(navController: NavController, character: CharactersModel) {
+fun CharacterCard(navController: NavController,
+                  character: CharactersModel,
+                  visibility: Boolean,
+                  characterSP: CharactersViewModel = CharactersViewModel()) {
+
+    val spoilerCharacter = characterSP.charactersSpoilerModel
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, bottom = 18.dp)
-            .clickable {
-                navController.navigate(route = AppScreens.CharacterScreen.route + "/${character.owner}/${character.id}")
-            }
+            .combinedClickable(
+                onClick = {
+                    navController.navigate(route = AppScreens.CharacterScreen.route + "/${character.owner}/${character.id}")
+                },
+                onLongClick = {
+                    Toast.makeText(context, "${character.alignment}", Toast.LENGTH_LONG).show()
+                }
+            )
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
 
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.dungeon4dummieslogotextless),
-                "Character_Avatar",
-                modifier = Modifier
-                    .width(60.dp)
-                    .height(60.dp)
-                    .padding(7.dp))
+            if (visibility)
+                Image(
+                    painter = painterResource(id = R.drawable.dungeon4dummieslogotextless),
+                    "Character_Avatar",
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(7.dp))
+            else
+                Image(
+                    painter = painterResource(id = R.drawable.spoileravatar),
+                    "Character_Avatar",
+                    modifier = Modifier
+                        .size(60.dp)
+                        .padding(7.dp))
+
             Column {
                 Row() { Text("${character.alias}", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 5.dp)) }
                 Row() {
-                    Text("Lvl ${character.level}")
+                    if (visibility)
+                        Text("Lvl ${character.level}")
+                    else
+                        Text("Lvl ???")
                     Spacer(modifier = Modifier.width(15.dp))
                     ClassIcon(characterClass = character.character_class)
                     Spacer(modifier = Modifier.width(5.dp))
@@ -116,25 +148,59 @@ fun CharacterCard(navController: NavController, character: CharactersModel) {
                 }
                 Row() {
                     Text(text = "Status: ")
-                    if (character.status.toLowerCase() == "alive") {
-                        Text("${character.status}", color = Color.Green, fontStyle = FontStyle.Italic)
-                    } else if(character.status.toLowerCase() == "dead") {
-                        Text("${character.status}", color = Color.Red, fontStyle = FontStyle.Italic)
-                    } else {
-                        Text("${character.status}", color = Color.Yellow, fontStyle = FontStyle.Italic)
-                    }
+                    if (visibility) {
+                        if (character.status.lowercase() == "alive") {
+                            Text(
+                                "${character.status}",
+                                color = Color.Green,
+                                fontStyle = FontStyle.Italic
+                            )
+                        } else if (character.status.lowercase() == "dead") {
+                            Text(
+                                "${character.status}",
+                                color = Color.Red,
+                                fontStyle = FontStyle.Italic
+                            )
+                        } else {
+                            Text(
+                                "${character.status}",
+                                color = Color.Yellow,
+                                fontStyle = FontStyle.Italic
+                            )
+                        }
+                    } else
+                        Text(
+                            "${spoilerCharacter.status}",
+                            color = Color.Yellow,
+                            fontStyle = FontStyle.Italic
+                        )
                 }
                 Row() {
                     Icon(painterResource(id = R.drawable.heart), "HP", tint = Color.Red)
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text("HP: ${character.current_hp}/${character.max_hp}",
-                        modifier = Modifier.padding(bottom = 5.dp))
 
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Icon(painterResource(id = R.drawable.flask), "MP", tint = Color.Blue)
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text("Mana: ${character.current_mana}/${character.max_mana}",
-                        modifier = Modifier.padding(bottom = 5.dp))
+                    if (visibility) {
+                        Text(
+                            "HP: ${character.current_hp}/${character.max_hp}",
+                            modifier = Modifier.padding(bottom = 5.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Icon(painterResource(id = R.drawable.flask), "MP", tint = Color.Blue)
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text("Mana: ${character.current_mana}/${character.max_mana}",
+                            modifier = Modifier.padding(bottom = 5.dp))
+                    }
+                    else {
+                        Text(
+                            "HP: ???/???",
+                            modifier = Modifier.padding(bottom = 5.dp)
+                        )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Icon(painterResource(id = R.drawable.flask), "MP", tint = Color.Blue)
+                        Spacer(modifier = Modifier.width(5.dp))
+                        Text("Mana: ???/???",
+                            modifier = Modifier.padding(bottom = 5.dp))
+                    }
                 }
             }
         }

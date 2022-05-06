@@ -21,6 +21,15 @@ class CharactersViewModel: ViewModel() {
         0, 0, 0, 0, 0, mutableListOf(""), mutableListOf(""),
         mutableListOf("", "", ""), 3, mutableListOf("", ""), "", "",
         "", "", "", "", "", "", 20, ""))
+
+    var charactersSpoilerModel: CharactersModel by mutableStateOf(CharactersModel("", "", "Spoiler", "Spoiler",
+        "Spoiler", "???", "Race is a spoiler? idk", "Spoiler alignment", 1, 0, "The class is a spoiler", "Spoiler archetype",
+        StatsModel(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+        0, 0, 0, 0, 0, mutableListOf("Spoiler"), mutableListOf("Spoiler"),
+        mutableListOf("Spoiler!", "Spoiler!", "Spoiler!"), 3, mutableListOf("Spoiler", "Spoiler"), "Spoily backstory", "",
+        "Proficiency in spoiler!", "", "Spoiler", "Spoilers ahead!", "Bondy spoiler", "", 20, ""))
+
     var statsModel: StatsModel by mutableStateOf(StatsModel(0, 0, 0, 0, 0, 0, 0, 0, 0, 20,
         0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
     private var errorMessage: String by mutableStateOf("")

@@ -80,8 +80,13 @@ fun NumericInput(label: String, number: Int, onValueChange:(intValue: Int) -> Un
         Row {
             TextField(
                 value = number.toString(),
-                onValueChange = {
-                    onValueChange(IntegerTryParse(it))
+                onValueChange = { value ->
+                    if (value == "")
+                        onValueChange(0)
+                    else if (value.length <= 2) {
+                        val text = value.filter { it.isDigit() }
+                        onValueChange(Integer.parseInt(text))
+                    }
                 },
                 label = { Text(label, textAlign = TextAlign.Center, fontSize = 10.sp) },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),

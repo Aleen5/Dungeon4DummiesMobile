@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
@@ -13,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.R
@@ -78,8 +80,88 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
             Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username)
         }
     ) {
+        // Tryhard content
+
+        /*
         Spacer(modifier = Modifier.padding(top = 40.dp))
 
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(16.dp)) {
+
+            // Carta Nombre, Apellido Y Alias
+
+            item {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            Text(
+                                text = "Alias",
+                                fontWeight = FontWeight.Bold,
+                                color = MAINCOLOR,
+                                fontSize = 20.sp
+                            )
+                        }
+
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            Text(
+                                text = character.alias,
+                                color = MAINCOLOR,
+                                fontSize = 20.sp,
+                                fontStyle = FontStyle.Italic
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(15.dp))
+
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Column(horizontalAlignment = Alignment.Start) {
+                                Text(
+                                    text = "Name",
+                                    fontWeight = FontWeight.Bold,
+                                    color = MAINCOLOR,
+                                    fontSize = 20.sp
+                                )
+                            }
+
+                            Column(horizontalAlignment = Alignment.End) {
+                                Text(
+                                    text = "Surname",
+                                    fontWeight = FontWeight.Bold,
+                                    color = MAINCOLOR,
+                                    fontSize = 20.sp
+                                )
+                            }
+                        }
+
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            Column() {
+                                Text(
+                                    text = character.name,
+                                    color = MAINCOLOR,
+                                    fontSize = 20.sp,
+                                    fontStyle = FontStyle.Italic
+                                )
+                            }
+
+
+
+                            Column() {
+                                Text(
+                                    text = character.surname,
+                                    color = MAINCOLOR,
+                                    fontSize = 20.sp,
+                                    fontStyle = FontStyle.Italic
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        */
+        // Normal content
+        Spacer(modifier = Modifier.padding(top = 40.dp))
         Card(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -133,7 +215,6 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
         }
     }
 }
-
 @Composable
 fun StatsText(statName: String, statValue: String, painter: Painter = painterResource(R.drawable.list)) {
     Row(

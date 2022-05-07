@@ -5,11 +5,13 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -81,7 +83,7 @@ fun CharactersScreen(navController: NavController, username: String) {
                     )
                 }
                 item { CreateCharacterScreenButton(navController = navController, username = username) }
-                item { Spacer(modifier = Modifier.height(40.dp)) }
+                item { Spacer(modifier = Modifier.height(60.dp)) }
             }
         } else {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -132,7 +134,8 @@ fun CharacterCard(navController: NavController,
                     "Character_Avatar",
                     modifier = Modifier
                         .size(60.dp)
-                        .padding(7.dp))
+                        .padding(7.dp)
+                        .clip(CircleShape))
 
             Column {
                 Row() { Text("${character.alias}", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 5.dp)) }

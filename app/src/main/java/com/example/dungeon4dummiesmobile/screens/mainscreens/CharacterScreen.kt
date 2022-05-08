@@ -13,23 +13,27 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.R
 import com.example.dungeon4dummiesmobile.models.CharactersModel
+import com.example.dungeon4dummiesmobile.navigation.AppScreens
 import com.example.dungeon4dummiesmobile.screens.shared.BottomBar
 import com.example.dungeon4dummiesmobile.screens.shared.Drawer
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtended
 import com.example.dungeon4dummiesmobile.screens.shared.TopBarExtendedWithVisibility
 import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
+import com.example.dungeon4dummiesmobile.ui.theme.SECONDARYCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 
 @Composable
 fun CharacterScreen(navController: NavController, username: String, characterID: String) {
     val charactersViewModel = viewModel(CharactersViewModel::class.java)
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+    val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     var visibility by remember {
         mutableStateOf(true)
@@ -182,11 +186,11 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 item { StatsText(statName = "Archetype", statValue = character.archetype) }
                 item { StatText(statName = "Inventory", painterResource(id = R.drawable.inventory))}
                 items(character.inventory) { item ->
-                    StatsArrayItem(statName = item, painterResource(id = R.drawable.chest))
+                    StatsArrayItem(statName = item, 100, painterResource(id = R.drawable.chest))
                 }
                 item { StatText(statName = "Attacks & Sorceries")}
                 items(character.attacks_sorceries) { attack ->
-                    StatsArrayItem(statName = attack, painterResource(id = R.drawable.book))
+                    StatsArrayItem(statName = attack, 100, painterResource(id = R.drawable.book))
                 }
                 item { StatText(statName = "Stats")}
                 item { SubstatsList(substats = character.stats)}
@@ -194,11 +198,11 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 item { StatsText(statName = "MP", statValue = "${character.current_mana}/${character.max_mana}") }
                 item { StatText(statName = "Adventure Journal")}
                 items(character.adventure_journal) { tale ->
-                    StatsArrayItem(statName = tale, painterResource(id = R.drawable.notebook))
+                    StatsArrayItem(statName = tale, 100, painterResource(id = R.drawable.notebook))
                 }
                 item { StatText(statName = "Features & Traits")}
                 items(character.features_traits) { feat ->
-                    StatsArrayItem(statName = feat)
+                    StatsArrayItem(statName = feat, 100)
                 }
                 item { StatsNumber(statName = "Death Saves", statValue = character.death_saves) }
                 item { StatsText(statName = "Backstory", statValue = character.backstory) }
@@ -210,7 +214,26 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 item { StatsNumber(statName = "Age", statValue = character.age) }
                 item { StatsText(statName = "Languages", statValue = character.languages) }
                 item { StatsText(statName = "Avatar (link)", statValue = character.avatar) }
-                item { Spacer(modifier = Modifier.height(40.dp))}
+
+                // Delete Character Button
+
+                item {
+                    Button(
+                        onClick = {
+                            setShowDialog(true)
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            Icon(painterResource(id = R.drawable.delete), "",
+                                modifier = Modifier
+                                    .height(25.dp)
+                                    .width(25.dp))
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text("Delete Character", fontSize = 18.sp, textAlign = TextAlign.Center)
+                        }
+                        DeleteDialog(navController, username, showDialog, setShowDialog, character.id)
+                    } }
+                item { Spacer(modifier = Modifier.height(60.dp))}
             }
         }
     }
@@ -223,7 +246,7 @@ fun StatsText(statName: String, statValue: String, painter: Painter = painterRes
         Text(
             text = "$statName:  ",
             fontWeight = FontWeight.Bold,
-            color = MAINCOLOR
+            color = Color.White
         )
         Text(
             text = statValue,
@@ -241,7 +264,7 @@ fun StatsNumber(statName: String, statValue: Int, painter: Painter = painterReso
         Text(
             text = "$statName:  ",
             fontWeight = FontWeight.Bold,
-            color = MAINCOLOR
+            color = Color.White
         )
         Text(
             text = statValue.toString(),
@@ -259,13 +282,13 @@ fun StatText(statName: String, painter: Painter = painterResource(R.drawable.lis
         Text(
             text = "$statName:   ",
             fontWeight = FontWeight.Bold,
-            color = MAINCOLOR
+            color = Color.White
         )
     }
 }
 
 @Composable
-fun StatsArrayItem(statName: String, painter: Painter = painterResource(R.drawable.list)) {
+fun StatsArrayItem(statName: String, mod: Int, painter: Painter = painterResource(R.drawable.list)) {
     Row() {
         Spacer(modifier = Modifier.width(5.dp))
         Icon(painter, contentDescription = "", tint = Color.LightGray)
@@ -275,34 +298,97 @@ fun StatsArrayItem(statName: String, painter: Painter = painterResource(R.drawab
             fontStyle = FontStyle.Italic,
             color = Color.White
         )
+        Spacer(modifier = Modifier.width(5.dp))
+
+        if (mod == 10 || mod == 11)
+            Text(
+                text = modifier(mod),
+                fontStyle = FontStyle.Italic,
+                color = Color.Yellow
+            )
+        else if (mod >= 12)
+            Text(
+                text = modifier(mod),
+                fontStyle = FontStyle.Italic,
+                color = Color.Green
+            )
+        else
+            Text(
+                text = modifier(mod),
+                fontStyle = FontStyle.Italic,
+                color = Color.Red
+            )
     }
 }
 
 @Composable
 fun SubstatsList(substats: StatsModel) {
-    StatsArrayItem(statName = "Armor Class: ${substats.ArmorClass}", painterResource(id = R.drawable.shield))
-    StatsArrayItem(statName = "Initiative: ${substats.Initiative} ${modifier(substats.Initiative)}", painterResource(id = R.drawable.initiative))
-    StatsArrayItem(statName = "Strength: ${substats.Strength} ${modifier(substats.Strength)}", painterResource(id = R.drawable.strength))
-    StatsArrayItem(statName = "Dexterity: ${substats.Dexterity} ${modifier(substats.Dexterity)}", painterResource(id = R.drawable.karate))
-    StatsArrayItem(statName = "Constitution: ${substats.Constitution} ${modifier(substats.Constitution)}", painterResource(id = R.drawable.heart))
-    StatsArrayItem(statName = "Intelligence: ${substats.Intelligence} ${modifier(substats.Intelligence)}", painterResource(id = R.drawable.idea))
-    StatsArrayItem(statName = "Wisdom: ${substats.Wisdom} ${modifier(substats.Wisdom)}", painterResource(id = R.drawable.brain))
-    StatsArrayItem(statName = "Charisma: ${substats.Charisma} ${modifier(substats.Charisma)}", painterResource(id = R.drawable.headcheck))
-    StatsArrayItem(statName = "Acrobatics: ${substats.Acrobatics} ${modifier(substats.Acrobatics)}", painterResource(id = R.drawable.acrobatics))
-    StatsArrayItem(statName = "Athletics: ${substats.Athletics} ${modifier(substats.Athletics)}", painterResource(id = R.drawable.run))
-    StatsArrayItem(statName = "Deception: ${substats.Deception} ${modifier(substats.Deception)}", painterResource(id = R.drawable.mask))
-    StatsArrayItem(statName = "History: ${substats.History} ${modifier(substats.History)}", painterResource(id = R.drawable.script))
-    StatsArrayItem(statName = "Insight: ${substats.Insight} ${modifier(substats.Insight)}", painterResource(id = R.drawable.flask))
-    StatsArrayItem(statName = "Intimidation: ${substats.Intimidation} ${modifier(substats.Intimidation)}", painterResource(id = R.drawable.angry))
-    StatsArrayItem(statName = "Performance: ${substats.Performance} ${modifier(substats.Performance)}", painterResource(id = R.drawable.fawkes))
-    StatsArrayItem(statName = "Medicine: ${substats.Medicine} ${modifier(substats.Medicine)}", painterResource(id = R.drawable.medic))
-    StatsArrayItem(statName = "Nature: ${substats.Nature} ${modifier(substats.Nature)}", painterResource(id = R.drawable.sprout))
-    StatsArrayItem(statName = "Perception: ${substats.Perception} ${modifier(substats.Perception)}", painterResource(id = R.drawable.eye))
-    StatsArrayItem(statName = "Persuasion: ${substats.Persuasion} ${modifier(substats.Persuasion)}", painterResource(id = R.drawable.persuasion))
-    StatsArrayItem(statName = "Religion: ${substats.Religion} ${modifier(substats.Religion)}", painterResource(id = R.drawable.cross))
-    StatsArrayItem(statName = "Stealth: ${substats.Stealth} ${modifier(substats.Stealth)}", painterResource(id = R.drawable.stealth))
-    StatsArrayItem(statName = "Survival: ${substats.Survival} ${modifier(substats.Survival)}", painterResource(id = R.drawable.survival))
-    StatsArrayItem(statName = "Animal Handling: ${substats.AnimalHandling} ${modifier(substats.AnimalHandling)}", painterResource(id = R.drawable.dog))
+    StatsArrayItem(statName = "Armor Class: ${substats.ArmorClass}", 100, painterResource(id = R.drawable.shield))
+    StatsArrayItem(statName = "Initiative: ${substats.Initiative}", substats.Initiative, painterResource(id = R.drawable.initiative))
+    StatsArrayItem(statName = "Strength: ${substats.Strength}", substats.Strength, painterResource(id = R.drawable.strength))
+    StatsArrayItem(statName = "Dexterity: ${substats.Dexterity}", substats.Dexterity, painterResource(id = R.drawable.karate))
+    StatsArrayItem(statName = "Constitution: ${substats.Constitution}", substats.Constitution, painterResource(id = R.drawable.heart))
+    StatsArrayItem(statName = "Intelligence: ${substats.Intelligence}", substats.Intelligence, painterResource(id = R.drawable.idea))
+    StatsArrayItem(statName = "Wisdom: ${substats.Wisdom}", substats.Wisdom, painterResource(id = R.drawable.brain))
+    StatsArrayItem(statName = "Charisma: ${substats.Charisma}", substats.Charisma, painterResource(id = R.drawable.headcheck))
+    StatsArrayItem(statName = "Acrobatics: ${substats.Acrobatics}", substats.Acrobatics, painterResource(id = R.drawable.acrobatics))
+    StatsArrayItem(statName = "Athletics: ${substats.Athletics}", substats.Athletics, painterResource(id = R.drawable.run))
+    StatsArrayItem(statName = "Deception: ${substats.Deception}", substats.Deception, painterResource(id = R.drawable.mask))
+    StatsArrayItem(statName = "History: ${substats.History}", substats.History, painterResource(id = R.drawable.script))
+    StatsArrayItem(statName = "Insight: ${substats.Insight}", substats.Insight, painterResource(id = R.drawable.flask))
+    StatsArrayItem(statName = "Intimidation: ${substats.Intimidation}", substats.Intimidation, painterResource(id = R.drawable.angry))
+    StatsArrayItem(statName = "Performance: ${substats.Performance}", substats.Performance, painterResource(id = R.drawable.fawkes))
+    StatsArrayItem(statName = "Medicine: ${substats.Medicine}", substats.Medicine, painterResource(id = R.drawable.medic))
+    StatsArrayItem(statName = "Nature: ${substats.Nature}", substats.Nature, painterResource(id = R.drawable.sprout))
+    StatsArrayItem(statName = "Perception: ${substats.Perception}", substats.Perception, painterResource(id = R.drawable.eye))
+    StatsArrayItem(statName = "Persuasion: ${substats.Persuasion}", substats.Persuasion, painterResource(id = R.drawable.persuasion))
+    StatsArrayItem(statName = "Religion: ${substats.Religion}", substats.Religion, painterResource(id = R.drawable.cross))
+    StatsArrayItem(statName = "Stealth: ${substats.Stealth}", substats.Stealth, painterResource(id = R.drawable.stealth))
+    StatsArrayItem(statName = "Survival: ${substats.Survival}", substats.Survival, painterResource(id = R.drawable.survival))
+    StatsArrayItem(statName = "Animal Handling: ${substats.AnimalHandling}", substats.AnimalHandling, painterResource(id = R.drawable.dog))
+}
+
+@Composable
+fun DeleteDialog(navController: NavController, username: String, showDialog: Boolean, setShowDialog: (Boolean) -> Unit, characterID: String) {
+    val charactersViewModel = CharactersViewModel()
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = {
+            },
+            title = {
+                Text("Delete Character?", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        charactersViewModel.deleteCharacter(characterID)
+                        setShowDialog(false)
+                        navController.navigate(route = AppScreens.CharactersScreen.route + "/$username") {
+                            popUpTo(0)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+                ) {
+                    Icon(painter = painterResource(id = R.drawable.delete), contentDescription = "YES, DELETE")
+                    Text("Yes, DELETE")
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        // Change the state to close the dialog
+                        setShowDialog(false)
+                    },
+                ) {
+                    Text("No, go back")
+                }
+            },
+            text = {
+                Text("You are going to delete this character.\nThis action cannot be undone.\n\nProceed?")
+            },
+        )
+    }
 }
 
 fun modifier(value: Int): String {
@@ -323,7 +409,7 @@ fun modifier(value: Int): String {
         in 4..5 -> "(-3)"
         in 2..3 -> "(-4)"
         in -99..1 -> "(-5)"
-        else -> "(+0)"
+        else -> ""
     }
 }
 

@@ -216,12 +216,15 @@ fun CreateCharacterScreenButton(navController: NavController, username: String) 
         navController.navigate(route = AppScreens.CharacterCreationScreen.route + "/$username")
     }) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 Icon(painterResource(id = R.drawable.plus), "", modifier = Modifier
                     .height(25.dp)
                     .width(25.dp))
                 Spacer(modifier = Modifier.width(10.dp))
-                Text("Create a new character", fontSize = 18.sp, textAlign = TextAlign.Center)
+                Text("Create a new character",
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold)
             }
         }
     }

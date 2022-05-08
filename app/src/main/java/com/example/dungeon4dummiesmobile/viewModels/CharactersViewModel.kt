@@ -115,4 +115,17 @@ class CharactersViewModel: ViewModel() {
             }
         }
     }
+
+    fun deleteCharacter(characterID: String) {
+        viewModelScope.launch {
+            val apiServices = ApiServices.getInstance()
+            try {
+                apiServices.deleteCharacter(characterID)
+
+            } catch (e: Exception) {
+                errorMessage = e.message.toString()
+                Log.d("CharacterDelete", errorMessage)
+            }
+        }
+    }
 }

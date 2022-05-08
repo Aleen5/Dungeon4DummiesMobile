@@ -52,6 +52,8 @@ interface ApiServices {
         @Body extra : CharactersModel
     ) : Response<CharactersModel>
 
+    @DELETE("characters/{id}")
+    suspend fun deleteCharacter(@Path("id")id: String)
 
     companion object {
         private var apiServices:ApiServices? = null

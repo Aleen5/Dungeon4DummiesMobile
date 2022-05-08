@@ -98,7 +98,9 @@ fun LoginButton(user: String, password: String, navController: NavController, us
 
             usersViewModel.login(user, password) { currentUser, cause ->
                 if (currentUser != null && cause == "good") {
-                    navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser!!.username}")
+                    navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser.username}") {
+                        popUpTo(0)
+                    }
                 }
                 else if(currentUser == null && cause == "bad"){
                     Toast.makeText(context, "Incorrect login", Toast.LENGTH_SHORT).show()

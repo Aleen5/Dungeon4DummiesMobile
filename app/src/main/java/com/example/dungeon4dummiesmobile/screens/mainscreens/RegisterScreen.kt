@@ -137,7 +137,9 @@ fun RegisterButton(navController: NavController, name: String, surname: String, 
                 } else {
                     usersViewModel.postUser(user)
                     Toast.makeText(context, "Registered successfully", Toast.LENGTH_SHORT).show()
-                    navController.navigate(route = AppScreens.HomeScreen.route + "/${user.username}")
+                    navController.navigate(route = AppScreens.HomeScreen.route + "/${user.username}") {
+                        popUpTo(0)
+                    }
                 }
             }
             showDialogLoading.value = false

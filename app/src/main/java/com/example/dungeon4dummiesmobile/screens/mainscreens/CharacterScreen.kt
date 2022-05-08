@@ -215,6 +215,26 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 item { StatsText(statName = "Languages", statValue = character.languages) }
                 item { StatsText(statName = "Avatar (link)", statValue = character.avatar) }
 
+                // Edit Character Button
+
+                item {
+                    Button(
+                        onClick = {
+
+                        },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = MAINCOLOR)) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            Icon(painterResource(id = R.drawable.pencil), "",
+                                modifier = Modifier
+                                    .height(25.dp)
+                                    .width(25.dp))
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text("Edit Character", fontSize = 18.sp, textAlign = TextAlign.Center)
+                        }
+                    } }
+
+                item { Spacer(modifier = Modifier.height(10.dp)) }
+
                 // Delete Character Button
 
                 item {

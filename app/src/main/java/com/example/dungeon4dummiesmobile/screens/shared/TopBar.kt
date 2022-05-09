@@ -67,7 +67,7 @@ fun TopBarExtended(barText: String, scope: CoroutineScope, scaffoldState: Scaffo
 }
 
 @Composable
-fun TopBarExtendedWithVisibility(barText: String, scope: CoroutineScope, scaffoldState: ScaffoldState, visibility: Boolean, onVisibilityClick:(visible: Boolean) -> Unit) {
+fun TopBarExtendedWithVisibility(barText: String, scope: CoroutineScope, scaffoldState: ScaffoldState, visibility: Boolean, visibilityIconVisible: Boolean, onVisibilityClick:(visible: Boolean) -> Unit) {
     TopAppBar(
         title = {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
@@ -82,14 +82,14 @@ fun TopBarExtendedWithVisibility(barText: String, scope: CoroutineScope, scaffol
                 }
 
                 Column(horizontalAlignment = Alignment.End, modifier = Modifier.fillMaxWidth().padding(end = 30.dp)) {
-                    if (visibility) Icon(
+                    if (visibility && visibilityIconVisible) Icon(
                         painter = painterResource(id = R.drawable.eye),
                         "",
                         tint = Color.LightGray,
                         modifier = Modifier.size(20.dp).clickable {
                             onVisibilityClick(false)
                         }
-                    ) else Icon(
+                    ) else if (!visibility && visibilityIconVisible) Icon(
                         painter = painterResource(id = R.drawable.eyeoff),
                         "",
                         tint = Color.LightGray,

@@ -703,7 +703,9 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                         charactersViewModel.postCharacter(character)
                         showDialogLoading.value = false
 
-                        navController.navigate(route = AppScreens.CharactersScreen.route + "/${username}")
+                        navController.navigate(route = AppScreens.CharactersScreen.route + "/${username}") {
+                            popUpTo(0)
+                        }
 
                     }) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {

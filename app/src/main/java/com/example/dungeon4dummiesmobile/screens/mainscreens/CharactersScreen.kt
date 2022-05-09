@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -60,7 +61,7 @@ fun CharactersScreen(navController: NavController, username: String) {
     }
 
     Scaffold(
-        topBar = { TopBarExtendedWithVisibility(barText = "Characters", scope = scope, scaffoldState = scaffoldState, visibility = visibility, onVisibilityClick = {visibility = it}) },
+        topBar = { TopBarExtendedWithVisibility(barText = "Characters", scope = scope, scaffoldState = scaffoldState, visibility = visibility, visibilityIconVisible = true, onVisibilityClick = {visibility = it}) },
         bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
         drawerContent = {
@@ -69,7 +70,7 @@ fun CharactersScreen(navController: NavController, username: String) {
         scaffoldState = scaffoldState
     ) {
         Spacer(modifier = Modifier.padding(top = 40.dp))
-        if (!charactersList.isEmpty()) {
+        if (charactersList.isNotEmpty()) {
 
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),

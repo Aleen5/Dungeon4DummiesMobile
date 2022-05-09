@@ -100,6 +100,31 @@ fun NumericInput(label: String, number: Int, onValueChange:(intValue: Int) -> Un
 }
 
 @Composable
+fun ReducedNumericInput(label: String, number: Int, onValueChange:(intValue: Int) -> Unit) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Row {
+            TextField(
+                value = number.toString(),
+                onValueChange = { value ->
+                    if (value == "")
+                        onValueChange(0)
+                    else if (value.length <= 2) {
+                        val text = value.filter { it.isDigit() }
+                        onValueChange(Integer.parseInt(text))
+                    }
+                },
+                label = { Text(label, textAlign = TextAlign.Center, fontSize = 10.sp) },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                modifier = Modifier
+                    .padding(10.dp)
+                    .width(100.dp)
+                    .height(60.dp)
+            )
+        }
+    }
+}
+
+@Composable
 fun ComposeMenu(
     menuItems: List<String>,
     menuExpandedState: Boolean,

@@ -1074,7 +1074,6 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 }
                 item { Spacer(modifier = Modifier.height(60.dp))}
 
-
             }
 
             // Handle On Back Pressed while editing a character
@@ -1314,7 +1313,3 @@ fun modifier(value: Int): String {
         else -> ""
     }
 }
-
-// ICONS FOR STATS
-
-// https://materialdesignicons.com/icon/gamepad

@@ -34,6 +34,14 @@ fun AppNavigation() {
              CharactersScreen(navController, username)
          }
 
+        composable(route = AppScreens.DiceThrowScreen.route + "/{username}", listOf(navArgument(name = "username") {
+            type = NavType.StringType
+        })) {
+            var username = it.arguments?.getString("username")
+            requireNotNull(username)
+            DiceThrowScreen(navController, username)
+        }
+
         composable(route = AppScreens.ProfileScreen.route + "/{username}", listOf(navArgument(name = "username") {
             type = NavType.StringType
         })) {

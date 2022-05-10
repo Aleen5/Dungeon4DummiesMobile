@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class CharactersViewModel: ViewModel() {
-    var charactersModelListResponse: List<CharactersModel> by mutableStateOf(listOf())
+    var charactersModelListResponse: MutableList<CharactersModel> by mutableStateOf(mutableListOf())
     var charactersModel: CharactersModel by mutableStateOf(CharactersModel("", "", "", "",
         "", "Alive", "", "","", 1, 0, "", "",
         StatsModel(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -39,7 +39,7 @@ class CharactersViewModel: ViewModel() {
             val apiServices = ApiServices.getInstance()
             try {
                 val charactersList = apiServices.getCharacters()
-                charactersModelListResponse = charactersList
+                charactersModelListResponse = charactersList as MutableList<CharactersModel>
             }
             catch (e: Exception) {
                 errorMessage = e.message.toString()
@@ -73,7 +73,7 @@ class CharactersViewModel: ViewModel() {
                 val cList = apiServices.getUsersCharacters(owner)
                 if (!cList.isNullOrEmpty()) {
                     onComplete(cList)
-                    charactersModelListResponse = cList
+                    charactersModelListResponse = cList as MutableList<CharactersModel>
                 }
             } catch (e: Exception) {
                 errorMessage = e.message.toString()

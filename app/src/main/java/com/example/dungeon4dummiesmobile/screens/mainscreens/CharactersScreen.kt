@@ -55,7 +55,7 @@ fun CharactersScreen(navController: NavController, username: String) {
         if (getData) {
             getData = false
             charactersViewModel.getUsersCharacters(username) {
-                charactersList = it
+                charactersList = it as MutableList<CharactersModel>
             }
         }
     }

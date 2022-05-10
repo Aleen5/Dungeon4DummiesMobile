@@ -15,7 +15,8 @@ import androidx.navigation.NavController
 fun BottomBar(navController: NavController, username: String) {
     val items = listOf(
         BottomBarNavigation.Home,
-        BottomBarNavigation.Characters
+        BottomBarNavigation.Characters,
+        BottomBarNavigation.DiceThrow
     )
     
     BottomNavigation(

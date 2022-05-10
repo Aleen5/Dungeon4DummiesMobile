@@ -83,6 +83,9 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
     var race by remember {
         mutableStateOf(races[racesListSelectedIndex])
     }
+    var campaigns by remember {
+        mutableStateOf("")
+    }
     var characterClass by remember {
         mutableStateOf(classes[classesListSelectedIndex])
     }
@@ -291,6 +294,9 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             }
                         )
                     }
+
+                    item { InputTextField("Campaigns", campaigns, onValueChange = {campaigns = it}) }
+
                     item { ComposeMenu(
                         menuItems = classes,
                         menuExpandedState = classesListExpanded,
@@ -532,9 +538,9 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     item { Button(
                         colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR),
                         onClick = {
-                        inventory = trimStringArray(stringInventory.split(";").toMutableList())
-                        attacksSorceries = trimStringArray(stringAttacksSorceries.split(";").toMutableList())
-                        featuresTraits = trimStringArray(stringFeaturesTraits.split(";").toMutableList())
+                        inventory = trimStringArray(stringInventory.replace("\n", "").removeSuffix(";").split(";").toMutableList())
+                        attacksSorceries = trimStringArray(stringAttacksSorceries.replace("\n", "").removeSuffix(";").split(";").toMutableList())
+                        featuresTraits = trimStringArray(stringFeaturesTraits.replace("\n", "").removeSuffix(";").split(";").toMutableList())
 
                         //// INICIO COMPROBACIONES ////
 
@@ -646,6 +652,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             character_class = characterClass,
                             status = status,
                             race = race,
+                            campaigns = campaigns,
                             alignment = alignment,
                             level = level,
                             exp = exp,

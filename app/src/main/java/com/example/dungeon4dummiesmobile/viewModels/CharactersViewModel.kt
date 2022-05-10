@@ -15,7 +15,7 @@ import retrofit2.Response
 class CharactersViewModel: ViewModel() {
     var charactersModelListResponse: List<CharactersModel> by mutableStateOf(listOf())
     var charactersModel: CharactersModel by mutableStateOf(CharactersModel("", "", "", "",
-        "", "Alive", "", "", 1, 0, "", "",
+        "", "Alive", "", "","", 1, 0, "", "",
         StatsModel(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         0, 0, 0, 0, 0, mutableListOf(""), mutableListOf(""),
@@ -23,7 +23,7 @@ class CharactersViewModel: ViewModel() {
         "", "", "", "", "", "", 20, ""))
 
     var charactersSpoilerModel: CharactersModel by mutableStateOf(CharactersModel("", "", "Spoiler", "Spoiler",
-        "Spoiler", "???", "Race is a spoiler? idk", "Spoiler alignment", 1, 0, "The class is a spoiler", "Spoiler archetype",
+        "Spoiler", "???", "Race is a spoiler? idk", "","Spoiler alignment", 1, 0, "The class is a spoiler", "Spoiler archetype",
         StatsModel(0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
         0, 0, 0, 0, 0, mutableListOf("Spoiler"), mutableListOf("Spoiler"),

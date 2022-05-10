@@ -84,6 +84,9 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
     var race by remember {
         mutableStateOf(races[racesListSelectedIndex])
     }
+    var campaigns by remember {
+        mutableStateOf("")
+    }
     var characterClass by remember {
         mutableStateOf(classes[classesListSelectedIndex])
     }
@@ -288,6 +291,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 alias = it.alias
                 status = it.status
                 race = it.race
+                campaigns = it.campaigns
                 racesListSelectedIndex = races.indexOf(it.race)
                 alignment = it.alignment
                 alignmentsListSelectedIndex = alignments.indexOf(it.alignment)
@@ -508,6 +512,11 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                                 racesListExpanded = false
                             }
                         )
+                    }
+
+                    item {
+                        StatText("Campaigns")
+                        InputTextField(label = "Insert the campaigns this character is part of", inValue = campaigns, onValueChange = {campaigns = it})
                     }
 
                     item {
@@ -774,6 +783,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                     item { StatsText(statName = "Alias", statValue = character.alias) }
                     item { StatsText(statName = "Status", statValue = character.status) }
                     item { StatsText(statName = "Race", statValue = character.race) }
+                    item { StatsText(statName = "Campaigns", statValue = character.campaigns) }
                     item { StatsText(statName = "Alignment", statValue = character.alignment) }
                     item { StatsText(statName = "HP", statValue = "${character.current_hp}/${character.max_hp}") }
                     item { StatsText(statName = "MP", statValue = "${character.current_mana}/${character.max_mana}") }
@@ -852,6 +862,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                                     character_class = characterClass,
                                     status = status,
                                     race = race,
+                                    campaigns = campaigns,
                                     alignment = alignment,
                                     level = level,
                                     exp = exp,

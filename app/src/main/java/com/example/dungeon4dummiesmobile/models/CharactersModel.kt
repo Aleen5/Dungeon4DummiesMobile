@@ -10,6 +10,7 @@ data class CharactersModel(
     var alias: String,
     val status: String,
     var race: String,
+    val campaigns: String,
     val alignment: String,
     val level: Int,
     val exp: Int,

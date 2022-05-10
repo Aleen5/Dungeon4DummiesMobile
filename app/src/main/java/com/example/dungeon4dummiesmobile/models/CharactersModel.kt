@@ -18,7 +18,7 @@ data class CharactersModel(
     var archetype: String,
     val stats: StatsModel,
     val max_hp: Int,
-    val current_hp: Int,
+    var current_hp: Int,
     val temporal_hp: Int,
     val max_mana: Int,
     val current_mana: Int,

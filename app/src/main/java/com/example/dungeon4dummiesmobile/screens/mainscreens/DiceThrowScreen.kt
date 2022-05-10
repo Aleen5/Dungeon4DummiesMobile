@@ -1,5 +1,6 @@
 package com.example.dungeon4dummiesmobile.screens.mainscreens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -7,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +32,7 @@ fun DiceThrowScreen(navController: NavController, username: String) {
     var selectedCharacter by remember {
         mutableStateOf(charactersViewModel.charactersModel)
     }
+    val context = LocalContext.current
 
     var user by remember {
         mutableStateOf(usersViewModel.user)
@@ -153,6 +156,14 @@ fun DiceThrowScreen(navController: NavController, username: String) {
                         }
                     )
                 }
+
+                Spacer(modifier = Modifier.width(5.dp))
+
+                Icon(painter = painterResource(id = R.drawable.shield), "Armor Class",
+                modifier = Modifier.size(35.dp))
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(text = "${selectedCharacter.stats.ArmorClass}", fontSize = 20.sp, fontWeight = FontWeight.Bold)
+
                 Spacer(modifier = Modifier.height(2.dp))
             }
 
@@ -174,19 +185,7 @@ fun DiceThrowScreen(navController: NavController, username: String) {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    DisabledReducedNumericInput(
-                        label = "HP",
-                        number = hp,
-                        onValueChange = { hp = it }
-                    )
-
-                    Spacer(modifier = Modifier.width(15.dp))
-
-                    DisabledReducedNumericInput(
-                        label = "Max HP",
-                        number = maxHP,
-                        onValueChange = { maxHP = it }
-                    )
+                    Text(text = "$hp/${selectedCharacter.max_hp}", fontSize = 20.sp, fontWeight = FontWeight.Bold)
                 }
 
                 Spacer(modifier = Modifier.height(15.dp))
@@ -327,7 +326,10 @@ fun DiceThrowScreen(navController: NavController, username: String) {
                 ) {
                     Button(
                         onClick = {
-                            hp -= totalAmount
+                            if (hp - totalAmount < 1)
+                                hp = 0
+                            else
+                                hp -= totalAmount
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
                         modifier = Modifier.wrapContentSize()
@@ -358,7 +360,10 @@ fun DiceThrowScreen(navController: NavController, username: String) {
 
                     Button(
                         onClick = {
-                            hp += totalAmount
+                            if (hp + totalAmount > maxHP)
+                                hp = maxHP
+                            else
+                                hp += totalAmount
                         },
                         colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green),
                         modifier = Modifier.wrapContentSize()
@@ -396,9 +401,32 @@ fun DiceThrowScreen(navController: NavController, username: String) {
                 }
 
 
-                Spacer(modifier = Modifier.height(5.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
             }
+
+            item {
+                Button(
+                    onClick = {
+
+                        if(charactersListSelectedIndex == 0) {
+                            Toast.makeText(context, "What are you trying to save?", Toast.LENGTH_LONG).show()
+                            return@Button
+                        }
+
+                        selectedCharacter.current_hp = hp
+                        charactersViewModel.updateCharacter(selectedCharacter)
+                        Toast.makeText(context, "Character ${selectedCharacter.alias} updated successfully", Toast.LENGTH_LONG).show()
+
+                    }
+                ) {
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                        Text(text = "Save changes", fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                    }
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(85.dp)) }
         }
     }
 }

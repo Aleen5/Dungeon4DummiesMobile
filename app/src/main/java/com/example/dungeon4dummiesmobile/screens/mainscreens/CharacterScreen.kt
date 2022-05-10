@@ -2,6 +2,7 @@ package com.example.dungeon4dummiesmobile.screens.mainscreens
 
 import StatsModel
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -32,6 +34,7 @@ import com.example.dungeon4dummiesmobile.viewModels.CharactersViewModel
 fun CharacterScreen(navController: NavController, username: String, characterID: String) {
     val charactersViewModel = viewModel(CharactersViewModel::class.java)
     val scaffoldState = rememberScaffoldState(rememberDrawerState(DrawerValue.Closed))
+    val context = LocalContext.current
     val (showDialog, setShowDialog) =  remember { mutableStateOf(false) }
     val (showBackDialog, setShowBackDialog) =  remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -64,7 +67,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
         "Locathah", "Grung")
 
     val classes = listOf("Select your class", "Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Rogue",
-        "Sorcerer", "Warlock", "Wizard", "Artificer", "Blood Hunter", "Ranger")
+        "Sorcerer", "Warlock", "Wizard", "Artificer", "Blood Hunter", "Ranger", "Warrior")
 
     val alignments = listOf("Select your alignment", "Lawful-Good", "Lawful-Neutral", "Lawful-Evil", "Neutral-Good", "True-Neutral",
         "Neutral-Evil", "Chaotic-Good", "Chaotic-Neutral", "Chaotic-Evil")
@@ -285,7 +288,9 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 alias = it.alias
                 status = it.status
                 race = it.race
+                racesListSelectedIndex = races.indexOf(it.race)
                 alignment = it.alignment
+                alignmentsListSelectedIndex = alignments.indexOf(it.alignment)
                 currentHP = it.current_hp
                 maxHP = it.max_hp
                 currentMP = it.current_mana
@@ -293,6 +298,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                 level = it.level
                 exp = it.exp
                 characterClass = it.character_class
+                classesListSelectedIndex = classes.indexOf(it.character_class)
                 archetype = it.archetype
 
                 inventory = it.inventory
@@ -831,12 +837,85 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
 
                         Button(
                             onClick = {
+
+                                adventureJournal = stringAdventureJournal.trim().replace("\n", "").removeSuffix(";").split(";").toMutableList()
+                                inventory = stringInventory.trim().replace("\n", "").removeSuffix(";").split(";").toMutableList()
+                                attacksSorceries = stringAttacksSorceries.trim().replace("\n", "").removeSuffix(";").split(";").toMutableList()
+                                featuresTraits = stringFeaturesTraits.trim().replace("\n", "").removeSuffix(";").split(";").toMutableList()
+
+                                var characterMod = CharactersModel(
+                                    _id = character._id,
+                                    id = character.id,
+                                    name = name,
+                                    surname = surname,
+                                    alias = alias,
+                                    character_class = characterClass,
+                                    status = status,
+                                    race = race,
+                                    alignment = alignment,
+                                    level = level,
+                                    exp = exp,
+                                    archetype = archetype,
+                                    inventory = inventory,
+                                    max_hp = maxHP,
+                                    current_hp = currentHP,
+                                    temporal_hp = temporalHP,
+                                    max_mana = maxMP,
+                                    current_mana = currentMP,
+                                    adventure_journal = adventureJournal,
+                                    features_traits = featuresTraits,
+                                    death_saves = deathSaves,
+                                    backstory = backstory,
+                                    ideals = ideals,
+                                    proficiencies = proficiencies,
+                                    flaws = flaws,
+                                    personality_traits = personalityTraits,
+                                    bonds = bonds,
+                                    age = age,
+                                    avatar = avatar,
+                                    languages = languages,
+                                    attacks_sorceries = attacksSorceries,
+                                    owner = username,
+
+                                    stats = StatsModel(
+                                        ArmorClass = armorClass,
+                                        Initiative = initiative,
+                                        Strength = strength,
+                                        Dexterity = dexterity,
+                                        Constitution = constitution,
+                                        Intelligence = intelligence,
+                                        Wisdom = wisdom,
+                                        Charisma = charisma,
+                                        Acrobatics = acrobatics,
+                                        Athletics = athletics,
+                                        Deception = deception,
+                                        History = history,
+                                        Insight = insight,
+                                        Intimidation = intimidation,
+                                        Performance = performance,
+                                        Medicine = medicine,
+                                        Nature = nature,
+                                        Perception = perception,
+                                        Persuasion = persuasion,
+                                        Religion = religion,
+                                        Stealth = stealth,
+                                        Survival = survival,
+                                        AnimalHandling = animalHandling
+                                    )
+                                )
+
+                                charactersViewModel.updateCharacter(characterMod)
+
+                                navController.navigate(route = AppScreens.CharactersScreen.route + "/$username") {
+                                    popUpTo(0)
+                                }
+
                                 editing = false
                                 visibilityIconVisible = true
                             },
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Green)) {
-                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                                Icon(painterResource(id = R.drawable.pencil), "",
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                                Icon(painterResource(id = R.drawable.disk), "",
                                     modifier = Modifier
                                         .height(25.dp)
                                         .width(25.dp))
@@ -844,12 +923,122 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                                 Text("Save Changes", fontSize = 18.sp, textAlign = TextAlign.Center)
                             }
                         }
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        // Stop Editing Button
+
+                        Button(
+                            onClick = {
+                                character = backupCharacter
+                                name = backupCharacter.name
+                                surname = backupCharacter.surname
+                                alias = backupCharacter.alias
+                                status = backupCharacter.status
+                                race = backupCharacter.race
+                                racesListSelectedIndex = races.indexOf(backupCharacter.race)
+                                alignment = backupCharacter.alignment
+                                alignmentsListSelectedIndex = alignments.indexOf(backupCharacter.alignment)
+                                currentHP = backupCharacter.current_hp
+                                maxHP = backupCharacter.max_hp
+                                currentMP = backupCharacter.current_mana
+                                maxMP = backupCharacter.max_mana
+                                level = backupCharacter.level
+                                exp = backupCharacter.exp
+                                characterClass = backupCharacter.character_class
+                                classesListSelectedIndex = classes.indexOf(backupCharacter.character_class)
+                                archetype = backupCharacter.archetype
+
+                                inventory = backupCharacter.inventory
+                                stringInventory = ""
+                                inventory.forEach { str ->
+                                    stringInventory += "$str;\n"
+                                }
+                                stringInventory.trim()
+                                stringInventory.removeSuffix(";")
+
+                                attacksSorceries = backupCharacter.attacks_sorceries
+                                attacksSorceries.forEach { str ->
+                                    stringAttacksSorceries += "$str;\n"
+                                }
+                                stringAttacksSorceries.trim()
+                                stringAttacksSorceries.removeSuffix(";")
+
+                                armorClass = backupCharacter.stats.ArmorClass
+                                initiative = backupCharacter.stats.Initiative
+                                strength = backupCharacter.stats.Strength
+                                dexterity = backupCharacter.stats.Dexterity
+                                constitution = backupCharacter.stats.Constitution
+                                intelligence = backupCharacter.stats.Intelligence
+                                wisdom = backupCharacter.stats.Wisdom
+                                charisma = backupCharacter.stats.Charisma
+                                acrobatics = backupCharacter.stats.Acrobatics
+                                athletics = backupCharacter.stats.Athletics
+                                deception = backupCharacter.stats.Deception
+                                history = backupCharacter.stats.History
+                                insight = backupCharacter.stats.Insight
+                                intimidation = backupCharacter.stats.Intimidation
+                                performance = backupCharacter.stats.Performance
+                                medicine = backupCharacter.stats.Medicine
+                                nature = backupCharacter.stats.Nature
+                                perception = backupCharacter.stats.Perception
+                                persuasion = backupCharacter.stats.Persuasion
+                                religion = backupCharacter.stats.Religion
+                                stealth = backupCharacter.stats.Stealth
+                                survival = backupCharacter.stats.Survival
+                                animalHandling = backupCharacter.stats.AnimalHandling
+
+                                adventureJournal = backupCharacter.adventure_journal
+                                stringAdventureJournal = ""
+                                adventureJournal.forEach { str ->
+                                    stringAdventureJournal += "$str;\n"
+                                }
+                                stringAdventureJournal.trim()
+                                stringAdventureJournal.removeSuffix(";")
+
+                                featuresTraits = backupCharacter.features_traits
+                                stringFeaturesTraits = ""
+                                featuresTraits.forEach { str ->
+                                    stringFeaturesTraits += "$str;\n"
+                                }
+                                stringFeaturesTraits.trim()
+                                stringFeaturesTraits.removeSuffix(";")
+
+                                deathSaves = backupCharacter.death_saves
+                                backstory = backupCharacter.backstory
+                                ideals = backupCharacter.ideals
+                                proficiencies = backupCharacter.proficiencies
+                                flaws = backupCharacter.flaws
+                                personalityTraits = backupCharacter.personality_traits
+                                bonds = backupCharacter.bonds
+                                age = backupCharacter.age
+                                languages = backupCharacter.languages
+                                avatar = backupCharacter.avatar
+
+                                Toast.makeText(context, "Current changes discarded successfully", Toast.LENGTH_SHORT).show()
+
+                                editing = false
+                                visibilityIconVisible = true
+                            },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Yellow)
+                        ) {
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                                Icon(
+                                    painterResource(id = R.drawable.eraser), "",
+                                    modifier = Modifier
+                                        .height(25.dp)
+                                        .width(25.dp)
+                                )
+                                Spacer(modifier = Modifier.width(10.dp))
+                                Text(
+                                    "Discard Changes",
+                                    fontSize = 18.sp,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
                 }
-
-                // Stop Editing Button
-
-                item {  }
 
                 item { Spacer(modifier = Modifier.height(10.dp)) }
 

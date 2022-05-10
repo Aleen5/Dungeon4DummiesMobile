@@ -102,6 +102,7 @@ fun ProfileEditButton(navController: NavController, username: String) {
                 .width(130.dp)
                 .padding(vertical = 15.dp),
             colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR),
+            enabled = false,
             onClick = {
                 navController.navigate(route = AppScreens.HomeScreen.route + "/${username}")
             }

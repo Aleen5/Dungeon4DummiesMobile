@@ -399,10 +399,7 @@ fun DiceThrowScreen(navController: NavController, username: String) {
                         number = totalAmount,
                         onValueChange = { totalAmount = it })
                 }
-
-
                 Spacer(modifier = Modifier.height(10.dp))
-
             }
 
             item {
@@ -415,6 +412,17 @@ fun DiceThrowScreen(navController: NavController, username: String) {
                         }
 
                         selectedCharacter.current_hp = hp
+                        selectedCharacter.max_hp = maxHP
+
+                        if (selectedCharacter.current_hp < 1) {
+                            if (selectedCharacter.death_saves < 1)
+                                selectedCharacter.status = "Dead"
+                            else
+                                selectedCharacter.status = "Unconscious"
+                        } else {
+                            selectedCharacter.status = "Alive"
+                        }
+
                         charactersViewModel.updateCharacter(selectedCharacter)
                         Toast.makeText(context, "Character ${selectedCharacter.alias} updated successfully", Toast.LENGTH_LONG).show()
 

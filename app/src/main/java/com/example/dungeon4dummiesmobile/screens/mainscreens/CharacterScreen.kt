@@ -915,6 +915,15 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                                     )
                                 )
 
+                                if (characterMod.current_hp < 1) {
+                                    if (characterMod.death_saves < 1)
+                                        characterMod.status = "Dead"
+                                    else
+                                        characterMod.status = "Unconscious"
+                                } else {
+                                    characterMod.status = "Alive"
+                                }
+
                                 charactersViewModel.updateCharacter(characterMod)
 
                                 navController.navigate(route = AppScreens.CharactersScreen.route + "/$username") {

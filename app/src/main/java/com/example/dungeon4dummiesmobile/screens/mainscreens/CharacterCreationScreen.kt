@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.R
@@ -274,6 +275,29 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     item { LogoAsset() }
+
+                    item {
+                        Button(
+                            onClick = {
+                                charactersViewModel.genRandomCharacter(username)
+                                Toast.makeText(context, "New random character generated successfully", Toast.LENGTH_LONG).show()
+
+                                navController.navigate(route = AppScreens.CharactersScreen.route + "/${username}") {
+                                    popUpTo(0)
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = SECONDARYCOLOR)
+                        ) {
+                            Icon(painter = painterResource(R.drawable.help),
+                                contentDescription =  "Create random character icon",
+                                modifier = Modifier.size(35.dp))
+                            Text(text = "Generate random character",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp
+                            )
+                        }
+                    }
+
                     item { InputTextField("Name", name, onValueChange = {name = it}) }
                     item { InputTextField("Surname", surname, onValueChange = {surname = it}) }
                     item { InputTextField("Alias", alias, onValueChange = {alias = it}) }
@@ -344,7 +368,13 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                     } }
                     item { InputTextField("Archetype", archetype, onValueChange = {archetype = it}) }
                     item { LongInputTextField(label = "Inventory (separate items with [ ; ])", inValue = stringInventory, onValueChange = {stringInventory = it})}
-                    item { Text(text = "Stats", modifier = Modifier.padding(15.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold)}
+
+
+                    item { Text(text = "Stats", modifier = Modifier.padding(15.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 20.sp)}
+
+                    item { Text(text = "Main Stats", modifier = Modifier.padding(15.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 15.sp)}
+
+
                     item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.shield), "", modifier = Modifier
@@ -385,6 +415,10 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             NumericInput(label = "Intelligence", number = intelligence, onValueChange = {intelligence = it})
                             }
                     } }
+
+                    item { Text(text = "Secondary Stats", modifier = Modifier.padding(15.dp), textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 15.sp)}
+
+
                     item { Row {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Icon(painterResource(R.drawable.brain), "", modifier = Modifier

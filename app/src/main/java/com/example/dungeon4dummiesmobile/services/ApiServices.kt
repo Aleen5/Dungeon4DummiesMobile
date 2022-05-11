@@ -35,6 +35,9 @@ interface ApiServices {
     @GET("characters")
     suspend fun getCharacters() : List<CharactersModel>
 
+    @GET("characters/randomcharacter/{owner}")
+    suspend fun genRandomCharacter(@Path("owner")id:String)
+
     @GET("characters/{id}")
     suspend fun getCharacter(@Path("id")id: String) : Response<CharactersModel>
 
@@ -61,8 +64,8 @@ interface ApiServices {
         fun getInstance() : ApiServices {
             if(apiServices == null) {
                 apiServices = Retrofit.Builder()
-                    //.baseUrl("http://172.26.8.72:8080/")             // IP del curro
-                    .baseUrl("http://192.168.1.76:8080/")            // IP de casa
+                    .baseUrl("http://172.26.8.72:8080/")             // IP del curro
+                    //.baseUrl("http://192.168.1.76:8080/")            // IP de casa
                     //.baseUrl("http://192.168.43.29:8080/")           // IP del Wi-Fi móvil
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(ApiServices::class.java)

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dungeon4dummiesmobile.models.CharactersModel
 import com.example.dungeon4dummiesmobile.services.ApiServices
 import kotlinx.coroutines.launch
@@ -42,6 +43,17 @@ class CharactersViewModel: ViewModel() {
                 charactersModelListResponse = charactersList as MutableList<CharactersModel>
             }
             catch (e: Exception) {
+                errorMessage = e.message.toString()
+            }
+        }
+    }
+
+    fun genRandomCharacter(id: String) {
+        viewModelScope.launch {
+            val apiServices = ApiServices.getInstance()
+            try {
+                apiServices.genRandomCharacter(id)
+            } catch (e: Exception) {
                 errorMessage = e.message.toString()
             }
         }

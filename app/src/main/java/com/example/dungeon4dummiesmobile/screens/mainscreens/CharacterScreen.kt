@@ -551,7 +551,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
                         StatText("MP")
                         NumericInput(label = "Current MP", number = currentMP, onValueChange = {currentMP = it})
                         StatText("Max MP")
-                        NumericInput(label = "Maximum MP", number = currentMP, onValueChange = {currentMP = it})
+                        NumericInput(label = "Maximum MP", number = currentMP, onValueChange = {maxMP = it})
                     }
                     item {
                         StatText("Character Level")

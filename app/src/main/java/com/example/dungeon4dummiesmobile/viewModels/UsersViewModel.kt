@@ -9,7 +9,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.dungeon4dummiesmobile.models.UsersModel
 import com.example.dungeon4dummiesmobile.services.ApiServices
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class UsersViewModel: ViewModel() {
     var usersModelListResponse: List<UsersModel> by mutableStateOf(listOf())

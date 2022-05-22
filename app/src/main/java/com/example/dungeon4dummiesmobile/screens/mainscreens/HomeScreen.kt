@@ -37,6 +37,10 @@ fun HomeScreen(navController: NavController, username: String) {
         "Take your time to write notes", "Always roleplay according to your character's backstory and behavior",
         "Meta-gaming is a sin", "People die if they are killed", "What happens, happens. And there's no turning back.")
 
+    var textTip by remember {
+        mutableStateOf("")
+    }
+
     var getData by remember {
         mutableStateOf(true)
     }
@@ -47,6 +51,7 @@ fun HomeScreen(navController: NavController, username: String) {
             usersViewModel.get1User(username) {
                 user = usersViewModel.user
             }
+            textTip = tips[Random.nextInt(tips.size)]
         }
     }
 
@@ -67,7 +72,7 @@ fun HomeScreen(navController: NavController, username: String) {
             Spacer(modifier = Modifier.height(10.dp))
             Row(modifier = Modifier.fillMaxWidth()) { Text(text = "Here's your random D&D tip:", fontSize = 18.sp) }
             Spacer(modifier = Modifier.height(70.dp))
-            Row() { Text(text = "${tips[Random.nextInt(tips.size)]}", textAlign = TextAlign.Center ,fontSize = 34.sp, fontFamily = FontFamily.Cursive)}
+            Row() { Text(text = textTip, textAlign = TextAlign.Center ,fontSize = 34.sp, fontFamily = FontFamily.Cursive)}
 
             Spacer(modifier = Modifier.height(30.dp))
             Image(painterResource(id = R.drawable.dungeon4dummieslogotextless), contentDescription = "",

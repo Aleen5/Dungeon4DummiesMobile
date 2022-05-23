@@ -710,7 +710,7 @@ fun CharacterCreationScreen(navController: NavController, username: String) {
                             avatar = avatar,
                             languages = languages,
                             attacks_sorceries = attacksSorceries,
-                            owner = user.username,
+                            owner = username,
 
                             stats = StatsModel(
                                 ArmorClass = armorClass,

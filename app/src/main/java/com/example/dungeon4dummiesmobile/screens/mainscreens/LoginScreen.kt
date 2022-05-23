@@ -3,26 +3,19 @@ package com.example.dungeon4dummiesmobile.screens.mainscreens
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.dungeon4dummiesmobile.navigation.AppScreens
 import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
 import com.example.dungeon4dummiesmobile.ui.theme.SECONDARYCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.dungeon4dummiesmobile.screens.shared.*
-import com.example.dungeon4dummiesmobile.ui.theme.Dungeon4DummiesMobileTheme
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -31,11 +24,11 @@ fun LoginScreen(navController: NavController) {
         mutableStateOf(false)
     }
     var user by remember {
-        mutableStateOf("SenatoSenatum15")
+        mutableStateOf("")
     }
 
     var password by remember {
-        mutableStateOf("1234")
+        mutableStateOf("")
     }
     
     Scaffold(

@@ -36,5 +36,5 @@ data class CharactersModel(
     val bonds: String,
     val languages: String,
     val age: Int,
-    val owner: String
+    var owner: String
 )

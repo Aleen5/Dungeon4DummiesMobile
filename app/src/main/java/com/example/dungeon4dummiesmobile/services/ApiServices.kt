@@ -10,19 +10,20 @@ interface ApiServices {
 
     // USERS
 
-    @GET("users")
-    suspend fun getUsers() : List<UsersModel>
-
     @GET("users/{username}")
     suspend fun getUser(@Path("username")username: String) : Response<UsersModel>
-
-    @GET("users/{username}/{password}")
-    suspend fun getLogin(@Path("username")username: String, @Path("password") password: String) : Response<UsersModel>
 
     @PUT("users/{username}")
     suspend fun updateUser(
         @Path("username")username: String,
         @Body user : UsersModel
+    ) : Response<UsersModel>
+
+    // The new shit
+
+    @POST("users/login")
+    suspend fun getLogin(
+        @Body extra: Auth,
     ) : Response<UsersModel>
 
     @POST("users")
@@ -65,9 +66,9 @@ interface ApiServices {
             if(apiServices == null) {
                 apiServices = Retrofit.Builder()
                     //.baseUrl("http://172.26.8.72:8080/")             // IP del curro
-                    //.baseUrl("http://192.168.1.76:8080/")            // IP de casa
+                    .baseUrl("http://192.168.1.76:8080/")            // IP de casa
                     //.baseUrl("http://192.168.43.29:8080/")           // IP del Wi-Fi móvil
-                    .baseUrl("https://dungeon4api.herokuapp.com/") // URL Heroku
+                    //.baseUrl("https://dungeon4api.herokuapp.com/") // URL Heroku
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(ApiServices::class.java)
             }

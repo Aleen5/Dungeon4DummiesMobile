@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.dungeon4dummiesmobile.models.Auth
 import com.example.dungeon4dummiesmobile.models.UsersModel
 import com.example.dungeon4dummiesmobile.services.ApiServices
 import kotlinx.coroutines.launch
@@ -16,19 +17,6 @@ class UsersViewModel: ViewModel() {
     private var errorMessage: String by mutableStateOf("")
     var loginFailures by mutableStateOf(3)
     var user = UsersModel("", "", "", "", "", "", mutableListOf("", ""))
-
-    fun getUsersList() {
-        viewModelScope.launch {
-            val apiServices = ApiServices.getInstance()
-            try {
-                val usersList = apiServices.getUsers()
-                usersModelListResponse = usersList
-            }
-            catch (e: Exception) {
-                errorMessage = e.message.toString()
-            }
-        }
-    }
 
     fun get1User(username: String, onComplete: (usersModel: UsersModel?) -> Unit) {
         viewModelScope.launch {
@@ -50,11 +38,11 @@ class UsersViewModel: ViewModel() {
         }
     }
 
-    fun login(username: String, password: String, onComplete: (usersModel: UsersModel?, cause: String) -> Unit) {
+    fun login(auth: Auth, onComplete: (usersModel: UsersModel?, cause: String) -> Unit) {
         viewModelScope.launch {
             val apiServices = ApiServices.getInstance()
             try {
-                val user = apiServices.getLogin(username, password)
+                val user = apiServices.getLogin(auth)
                 if (user.isSuccessful) {
                     onComplete(user.body()!!, "good")
 

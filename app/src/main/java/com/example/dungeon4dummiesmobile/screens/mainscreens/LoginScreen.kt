@@ -15,6 +15,7 @@ import com.example.dungeon4dummiesmobile.ui.theme.MAINCOLOR
 import com.example.dungeon4dummiesmobile.ui.theme.SECONDARYCOLOR
 import com.example.dungeon4dummiesmobile.viewModels.UsersViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.dungeon4dummiesmobile.models.Auth
 import com.example.dungeon4dummiesmobile.screens.shared.*
 
 @Composable
@@ -89,7 +90,8 @@ fun LoginButton(user: String, password: String, navController: NavController, us
 
             showDialogLoading.value = true
 
-            usersViewModel.login(user, password) { currentUser, cause ->
+            val auth = Auth(user, password)
+            usersViewModel.login(auth) { currentUser, cause ->
                 if (currentUser != null && cause == "good") {
                     navController.navigate(route = AppScreens.HomeScreen.route + "/${currentUser.username}") {
                         popUpTo(0)

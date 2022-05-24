@@ -380,6 +380,7 @@ fun CharacterScreen(navController: NavController, username: String, characterID:
             onVisibilityClick = {visibility = it}) },
         bottomBar = { BottomBar(navController, username) },
         drawerGesturesEnabled = true,
+        scaffoldState = scaffoldState,
         drawerContent = {
             Drawer(scope = scope, scaffoldState = scaffoldState, navController = navController, username)
         }
